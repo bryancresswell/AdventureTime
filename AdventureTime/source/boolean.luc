@@ -1,0 +1,20 @@
+// Boolean unit that perform
+// Functionality: AND, OR, XOR, "A" (LDR)
+
+module boolean (
+	input alufn[6], // 6 bit ALU opcode
+	input a[8], // 8 bit input A
+	input b[8], // 8 bit input B
+	output booleanFinal[8]  // boolean 8 bit output
+) {
+	
+	always {
+		case (alufn[3:0]) {
+      // OR
+		  b1110: 
+        booleanFinal = a | b;
+		  default: 
+        booleanFinal = a & b;
+		}
+	}
+}

@@ -1,0 +1,31 @@
+module sevenseg (
+    input dot,
+    input char[4],
+    output segs[8]
+  ) {
+
+  sig sg[7];
+  
+  always {
+    case (char) {
+      h0: sg = 7b0111111;
+      h1: sg = 7b0000110;
+      h2: sg = 7b1011011;
+      h3: sg = 7b1001111;
+      h4: sg = 7b1100110;
+      h5: sg = 7b1101101;
+      h6: sg = 7b1111101;
+      h7: sg = 7b0000111;
+      h8: sg = 7b1111111;
+      h9: sg = 7b1100111;
+      ha: sg = 7b1110111;
+      hb: sg = 7b1111100;
+      hc: sg = 7b0111001;
+      hd: sg = 7b1011110;
+      he: sg = 7b1111001;
+      hf: sg = 7b1110001;
+      default: sg = 7b0000000;
+    }
+    segs = c{dot, sg};
+  }
+}

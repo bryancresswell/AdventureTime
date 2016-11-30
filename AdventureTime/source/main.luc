@@ -1,0 +1,85 @@
+// 8-bit ALU
+// Functionality: Addition, Subtraction, Multiplication, Boolean, Shifter, Compare.
+module main(
+
+    // inputs
+    input alufn[6],
+    input a[8],
+    input b[8],
+    
+    // outputs
+    output alu[8],
+    output z,
+    output v,
+    output n,
+    output subtractionOverFLow
+  ) {
+  
+  // functions of 8-bit ALU 
+  adder add;
+  compare com;
+  multiply multi;
+  shifter shift;
+  boolean boo;
+      
+  always {
+    
+    // assignments for adder
+    add.a = a;
+    add.b = b;
+    add.alufn = alufn;
+    
+    // assignments for compare
+    com.alufn = alufn;
+    com.z = add.z;
+    
+    // assignments for shifter 
+    shift.alufn = alufn;
+    shift.a = a;
+    shift.b = b;
+    
+    // assignments for boolean
+    boo.alufn = alufn;
+    boo.a = a;
+    boo.b = b;
+    
+    // assignments for multiply
+    multi.alufn = alufn;
+    multi.a = a;
+    multi.b = b;
+    
+    // alu[5:4] will determine which function to call
+    // For instance:
+    // 00 - Addition / Subtraction / Multiplication
+    // 01 - Boolean
+    // 10 - Shifter
+    // 11 - Compare
+    case (alufn[5:4]){
+      // select adder or multiply
+      b00:
+        if (alufn[1]){
+          alu = multi.mulFinal;
+        }
+        else{
+          alu = add.totalSum;
+        }
+      // select boolean
+      b01:
+      alu = boo.booleanFinal;
+      // select shifter
+      b10:
+      alu = shift.shifterResult;
+      // select compare
+      b11:
+      alu = com.cmpFinal;
+      // default case
+      default:
+      alu = 8b0;
+    }
+    z = add.z;
+    v = add.v;
+    n = add.n;
+    subtractionOverFLow = add.subtractionOverflow;
+  }
+}
+

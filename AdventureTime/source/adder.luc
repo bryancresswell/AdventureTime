@@ -1,0 +1,40 @@
+module adder (
+    // 8-bit ALU's input
+    input alufn[6],
+    input a[8],
+    input b[8],
+    
+    // Output to 8-bit ALU
+    output totalSum[8],
+    output z, // true when S outputs are all zero
+    output v, // true when the addition operation overflow
+    output n, // true when S is negative
+    output subtractionOverflow // indicate subtraction over flow
+  ) {
+  
+  sig sum[9]; // in case of overflow
+  sig subtractionSum[9]; // to obtain z, v and n 
+  
+  always {
+    case(alufn[1:0]){
+      // Addition
+      b00:
+        subtractionSum = a - b;
+        sum = a + b;
+      // Subtraction
+      b01:
+        subtractionSum = a - b;
+        sum = a - b;
+      default:
+        subtractionSum = a - b;
+        sum = a + b;
+    }
+    
+    totalSum = sum[7:0];
+    z = ~|subtractionSum;
+    v = (a[7] & b[7] & (~sum[7])) | ((~a[7]) & (~b[7]) & sum[7]);
+    n = subtractionSum[7];
+    subtractionOverflow = (a[7] & ~b[7] & (~subtractionSum[7])) | ((~a[7]) & (b[7]) & subtractionSum[7]);
+  }
+}
+

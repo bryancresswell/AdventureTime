@@ -1,0 +1,25 @@
+module multiply (
+    // input
+    input a[8],
+    input b[8],
+    input alufn[6],
+    // output
+    output mulFinal[8]
+  ) {
+  always {
+    // select multiply operation if alufn[1] = 1
+    if (alufn[1]){
+      mulFinal[6:0] = a[6:0] * b[6:0];
+    }
+    if (a[7] == 1 && b[7] == 1){
+      mulFinal[7] = 0;
+    }
+    else if (a[7] == 1 || b[7] ==1){
+      mulFinal[7] = 1;
+    }
+    else{
+      mulFinal[7] = 0;
+    }        
+  }
+}
+

@@ -1,0 +1,27 @@
+// Compare unit that perform CMPEQ, CMPLT, CMPLE
+
+module compare (
+    // Input from 8- bit ALU
+    input alufn[6],
+    // Input from Adder
+    input z,
+    // Outout to the 8-bit ALU
+    output cmpFinal[8]   
+  ) {
+  
+  sig cmpVal;
+    
+  always {
+    // ALUFN[2:1] are used to control the compare unit
+    case (alufn[2:1]) {
+      // A = B (CMPEQ)
+      b01:
+        cmpVal = z;
+      default:
+        cmpVal = b0;
+    }
+    cmpFinal[0] = cmpVal;
+    cmpFinal[7:1] = 7b0;    
+  }
+}
+

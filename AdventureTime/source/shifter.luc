@@ -1,0 +1,19 @@
+module shifter (
+	input alufn[6],
+	input a[8],
+	input b[8],
+	output shifterResult[8]
+) { 
+  
+always {
+
+	case(alufn[2:0]) {
+		b000:
+			shifterResult = a << b; // shift left
+		b001:
+			shifterResult = a >> b; // shift right
+		default:
+			shifterResult[7:0] = a << b;
+		}
+	}
+}
