@@ -35,13 +35,6 @@ module mojo_top_0 (
     .in(M_reset_cond_in),
     .out(M_reset_cond_out)
   );
-  wire [1-1:0] M_ed_out;
-  reg [1-1:0] M_ed_in;
-  edge_detector_2 ed (
-    .clk(clk),
-    .in(M_ed_in),
-    .out(M_ed_out)
-  );
   localparam START_states = 1'd0;
   localparam IDLE_states = 1'd1;
   
@@ -49,36 +42,27 @@ module mojo_top_0 (
   wire [32-1:0] M_rngesus_num;
   reg [1-1:0] M_rngesus_next;
   reg [32-1:0] M_rngesus_seed;
-  pn_gen_3 rngesus (
+  pn_gen_2 rngesus (
     .clk(clk),
     .rst(rst),
     .next(M_rngesus_next),
     .seed(M_rngesus_seed),
     .num(M_rngesus_num)
   );
-  wire [7-1:0] M_seg_seg;
-  wire [2-1:0] M_seg_sel;
-  reg [8-1:0] M_seg_values;
-  multi_seven_seg_4 seg (
+  wire [4-1:0] M_timingCounter_value;
+  reg [1-1:0] M_timingCounter_rst;
+  counter_3 timingCounter (
     .clk(clk),
-    .rst(rst),
-    .values(M_seg_values),
-    .seg(M_seg_seg),
-    .sel(M_seg_sel)
+    .rst(M_timingCounter_rst),
+    .value(M_timingCounter_value)
   );
-  wire [8-1:0] M_dec_ctr_digits;
-  reg [1-1:0] M_dec_ctr_inc;
-  multi_dec_ctr_5 dec_ctr (
-    .clk(clk),
-    .rst(rst),
-    .inc(M_dec_ctr_inc),
-    .digits(M_dec_ctr_digits)
-  );
-  wire [1-1:0] M_ctr_value;
-  counter_6 ctr (
-    .clk(clk),
-    .rst(rst),
-    .value(M_ctr_value)
+  
+  wire [8-1:0] M_seg_segs;
+  reg [4-1:0] M_seg_char;
+  sevenseg_4 seg (
+    .dot(1'h0),
+    .char(M_seg_char),
+    .segs(M_seg_segs)
   );
   
   reg [5:0] alufn;
@@ -97,7 +81,7 @@ module mojo_top_0 (
   reg [6-1:0] M_alu1_alufn;
   reg [8-1:0] M_alu1_a;
   reg [8-1:0] M_alu1_b;
-  main_7 alu1 (
+  main_5 alu1 (
     .alufn(M_alu1_alufn),
     .a(M_alu1_a),
     .b(M_alu1_b),
@@ -122,18 +106,97 @@ module mojo_top_0 (
     io_led = 24'h000000;
     io_seg = 8'hff;
     io_sel = 4'hf;
-    M_seg_values = 8'h31;
     M_alu1_alufn = 1'h0;
     M_alu1_a = 1'h0;
     M_alu1_b = 1'h0;
     alu = M_alu1_alu;
-    M_ed_in = M_ctr_value;
-    M_dec_ctr_inc = M_ed_out;
-    M_seg_values = M_dec_ctr_digits;
-    io_seg = ~M_seg_seg;
-    io_sel = ~M_seg_sel;
-    if (M_seg_seg[1+0-:1] == 2'h2 && M_seg_seg[0+0-:1] == 1'h0) begin
-      M_states_d = IDLE_states;
+    M_timingCounter_rst = 1'h1;
+    M_seg_char = 1'h0;
+    io_seg = ~M_seg_segs;
+    io_sel = 4'he;
+    if (M_states_q == START_states) begin
+      led = M_rngesus_num[16+5-:6];
+      if (M_rngesus_num[16+5-:6] == 6'h02) begin
+        M_timingCounter_rst = 1'h0;
+        M_seg_char = 4'h9 - M_timingCounter_value;
+        M_alu1_alufn = 6'h02;
+        M_alu1_a = M_rngesus_num[0+3-:4];
+        M_alu1_b = M_rngesus_num[4+3-:4];
+        alu = M_alu1_alu;
+        io_led[0+7-:8] = M_rngesus_num[0+3-:4];
+        io_led[8+7-:8] = 6'h02;
+        io_led[16+7-:8] = M_rngesus_num[4+3-:4];
+        if (M_timingCounter_value < 4'h9 && io_dip[8+7-:8] == alu) begin
+          M_states_d = IDLE_states;
+          led[0+0-:1] = 1'h1;
+        end else begin
+          if (M_timingCounter_value == 4'h9) begin
+            M_states_d = IDLE_states;
+          end
+        end
+      end else begin
+        if (M_rngesus_num[16+5-:6] == 6'h00) begin
+          M_timingCounter_rst = 1'h0;
+          M_seg_char = 4'h9 - M_timingCounter_value;
+          M_alu1_alufn = M_rngesus_num[16+5-:6];
+          M_alu1_a = M_rngesus_num[0+7-:8];
+          M_alu1_b = M_rngesus_num[8+7-:8];
+          alu = M_alu1_alu;
+          io_led[0+7-:8] = M_rngesus_num[0+7-:8];
+          io_led[8+7-:8] = M_rngesus_num[16+5-:6];
+          io_led[16+7-:8] = M_rngesus_num[8+7-:8];
+          if (M_timingCounter_value < 4'h9 && io_dip[8+7-:8] == alu) begin
+            M_states_d = IDLE_states;
+            led[0+0-:1] = 1'h1;
+          end else begin
+            if (M_timingCounter_value == 4'h9) begin
+              M_states_d = IDLE_states;
+            end
+          end
+        end else begin
+          if (M_rngesus_num[16+5-:6] == 6'h01) begin
+            if (M_rngesus_num[0+7-:8] < M_rngesus_num[8+7-:8]) begin
+              M_timingCounter_rst = 1'h0;
+              M_seg_char = 4'h9 - M_timingCounter_value;
+              M_alu1_alufn = M_rngesus_num[16+5-:6];
+              M_alu1_a = M_rngesus_num[8+7-:8];
+              M_alu1_b = M_rngesus_num[0+7-:8];
+              alu = M_alu1_alu;
+              io_led[16+7-:8] = M_rngesus_num[0+7-:8];
+              io_led[8+7-:8] = M_rngesus_num[16+5-:6];
+              io_led[0+7-:8] = M_rngesus_num[8+7-:8];
+              if (M_timingCounter_value < 4'h9 && io_dip[8+7-:8] == alu) begin
+                M_states_d = IDLE_states;
+                led[0+0-:1] = 1'h1;
+              end else begin
+                if (M_timingCounter_value == 4'h9) begin
+                  M_states_d = IDLE_states;
+                end
+              end
+            end else begin
+              M_timingCounter_rst = 1'h0;
+              M_seg_char = 4'h9 - M_timingCounter_value;
+              M_alu1_alufn = M_rngesus_num[16+5-:6];
+              M_alu1_a = M_rngesus_num[8+7-:8];
+              M_alu1_b = M_rngesus_num[0+7-:8];
+              alu = M_alu1_alu;
+              io_led[0+7-:8] = M_rngesus_num[0+7-:8];
+              io_led[8+7-:8] = M_rngesus_num[16+5-:6];
+              io_led[16+7-:8] = M_rngesus_num[8+7-:8];
+              if (M_timingCounter_value < 4'h9 && io_dip[8+7-:8] == alu) begin
+                M_states_d = IDLE_states;
+                led[0+0-:1] = 1'h1;
+              end else begin
+                if (M_timingCounter_value == 4'h9) begin
+                  M_states_d = IDLE_states;
+                end
+              end
+            end
+          end else begin
+            M_rngesus_next = 1'h1;
+          end
+        end
+      end
     end else begin
       if (M_states_q == IDLE_states) begin
         if (io_button[1+0-:1]) begin
