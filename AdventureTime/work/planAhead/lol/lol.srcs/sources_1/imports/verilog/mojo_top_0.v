@@ -20,8 +20,11 @@ module mojo_top_0 (
     output reg [23:0] io_led,
     output reg [7:0] io_seg,
     output reg [3:0] io_sel,
-    input [4:0] io_button,
-    input [23:0] io_dip
+    output reg [7:0] a_seg,
+    output reg [3:0] a_sel,
+    output reg [7:0] b_seg,
+    output reg [3:0] b_sel,
+    input [4:0] io_button
   );
   
   
@@ -35,6 +38,20 @@ module mojo_top_0 (
     .in(M_reset_cond_in),
     .out(M_reset_cond_out)
   );
+  wire [16-1:0] M_digitsa_digits;
+  reg [14-1:0] M_digitsa_value;
+  bin_to_dec_2 digitsa (
+    .clk(clk),
+    .value(M_digitsa_value),
+    .digits(M_digitsa_digits)
+  );
+  wire [16-1:0] M_digitsb_digits;
+  reg [14-1:0] M_digitsb_value;
+  bin_to_dec_2 digitsb (
+    .clk(clk),
+    .value(M_digitsb_value),
+    .digits(M_digitsb_digits)
+  );
   localparam START_states = 1'd0;
   localparam IDLE_states = 1'd1;
   
@@ -42,16 +59,36 @@ module mojo_top_0 (
   wire [32-1:0] M_rngesus_num;
   reg [1-1:0] M_rngesus_next;
   reg [32-1:0] M_rngesus_seed;
-  pn_gen_2 rngesus (
+  pn_gen_4 rngesus (
     .clk(clk),
     .rst(rst),
     .next(M_rngesus_next),
     .seed(M_rngesus_seed),
     .num(M_rngesus_num)
   );
+  wire [8-1:0] M_msega_seg;
+  wire [4-1:0] M_msega_sel;
+  reg [16-1:0] M_msega_values;
+  multi_seven_seg_5 msega (
+    .clk(clk),
+    .rst(rst),
+    .values(M_msega_values),
+    .seg(M_msega_seg),
+    .sel(M_msega_sel)
+  );
+  wire [8-1:0] M_msegb_seg;
+  wire [4-1:0] M_msegb_sel;
+  reg [16-1:0] M_msegb_values;
+  multi_seven_seg_5 msegb (
+    .clk(clk),
+    .rst(rst),
+    .values(M_msegb_values),
+    .seg(M_msegb_seg),
+    .sel(M_msegb_sel)
+  );
   wire [4-1:0] M_timingCounter_value;
   reg [1-1:0] M_timingCounter_rst;
-  counter_3 timingCounter (
+  counter_7 timingCounter (
     .clk(clk),
     .rst(M_timingCounter_rst),
     .value(M_timingCounter_value)
@@ -59,7 +96,7 @@ module mojo_top_0 (
   
   wire [8-1:0] M_seg_segs;
   reg [4-1:0] M_seg_char;
-  sevenseg_4 seg (
+  sevenseg_8 seg (
     .dot(1'h0),
     .char(M_seg_char),
     .segs(M_seg_segs)
@@ -81,7 +118,7 @@ module mojo_top_0 (
   reg [6-1:0] M_alu1_alufn;
   reg [8-1:0] M_alu1_a;
   reg [8-1:0] M_alu1_b;
-  main_5 alu1 (
+  main_9 alu1 (
     .alufn(M_alu1_alufn),
     .a(M_alu1_a),
     .b(M_alu1_b),
@@ -106,6 +143,10 @@ module mojo_top_0 (
     io_led = 24'h000000;
     io_seg = 8'hff;
     io_sel = 4'hf;
+    a_seg = 8'hff;
+    a_sel = 4'hf;
+    b_seg = 8'hff;
+    b_sel = 4'hf;
     M_alu1_alufn = 1'h0;
     M_alu1_a = 1'h0;
     M_alu1_b = 1'h0;
@@ -114,6 +155,14 @@ module mojo_top_0 (
     M_seg_char = 1'h0;
     io_seg = ~M_seg_segs;
     io_sel = 4'he;
+    M_digitsa_value = M_rngesus_num[0+7-:8];
+    M_msega_values = M_digitsa_digits;
+    a_seg = M_msega_seg;
+    a_sel = ~M_msega_sel;
+    M_digitsb_value = M_rngesus_num[8+7-:8];
+    M_msegb_values = M_digitsb_digits;
+    b_seg = M_msegb_seg;
+    b_sel = ~M_msegb_sel;
     if (M_states_q == START_states) begin
       led = M_rngesus_num[16+5-:6];
       if (M_rngesus_num[16+5-:6] == 6'h02) begin
@@ -121,12 +170,12 @@ module mojo_top_0 (
         M_seg_char = 4'h9 - M_timingCounter_value;
         M_alu1_alufn = 6'h02;
         M_alu1_a = M_rngesus_num[0+3-:4];
-        M_alu1_b = M_rngesus_num[4+3-:4];
+        M_alu1_b = M_rngesus_num[8+3-:4];
         alu = M_alu1_alu;
         io_led[0+7-:8] = M_rngesus_num[0+3-:4];
         io_led[8+7-:8] = 6'h02;
         io_led[16+7-:8] = M_rngesus_num[4+3-:4];
-        if (M_timingCounter_value < 4'h9 && io_dip[8+7-:8] == alu) begin
+        if (M_timingCounter_value < 4'h9) begin
           M_states_d = IDLE_states;
           led[0+0-:1] = 1'h1;
         end else begin
@@ -145,7 +194,7 @@ module mojo_top_0 (
           io_led[0+7-:8] = M_rngesus_num[0+7-:8];
           io_led[8+7-:8] = M_rngesus_num[16+5-:6];
           io_led[16+7-:8] = M_rngesus_num[8+7-:8];
-          if (M_timingCounter_value < 4'h9 && io_dip[8+7-:8] == alu) begin
+          if (M_timingCounter_value < 4'h9) begin
             M_states_d = IDLE_states;
             led[0+0-:1] = 1'h1;
           end else begin
@@ -165,7 +214,7 @@ module mojo_top_0 (
               io_led[16+7-:8] = M_rngesus_num[0+7-:8];
               io_led[8+7-:8] = M_rngesus_num[16+5-:6];
               io_led[0+7-:8] = M_rngesus_num[8+7-:8];
-              if (M_timingCounter_value < 4'h9 && io_dip[8+7-:8] == alu) begin
+              if (M_timingCounter_value < 4'h9) begin
                 M_states_d = IDLE_states;
                 led[0+0-:1] = 1'h1;
               end else begin
@@ -183,7 +232,7 @@ module mojo_top_0 (
               io_led[0+7-:8] = M_rngesus_num[0+7-:8];
               io_led[8+7-:8] = M_rngesus_num[16+5-:6];
               io_led[16+7-:8] = M_rngesus_num[8+7-:8];
-              if (M_timingCounter_value < 4'h9 && io_dip[8+7-:8] == alu) begin
+              if (M_timingCounter_value < 4'h9) begin
                 M_states_d = IDLE_states;
                 led[0+0-:1] = 1'h1;
               end else begin

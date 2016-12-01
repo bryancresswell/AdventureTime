@@ -14,8 +14,12 @@ module mojo_top (
     output io_led [3][8],   // LEDs on IO Shield
     output io_seg [8],      // 7-segment LEDs on IO Shield
     output io_sel [4],      // Digit select on IO Shield
-    input io_button [5],    // 5 buttons on IO Shield
-    input io_dip [3][8]     // DIP switches on IO Shield
+    output a_seg [8],       // 7-segment external A
+    output a_sel [4],       // 7-segment external sel A
+    output b_seg [8],       // 7-segment external B
+    output b_sel [4],       // 7-segment external sel B
+    input io_button [5]    // 5 buttons on IO Shield
+    //removed dip switches
   ) {
   sig rst;              // reset signal
   
@@ -23,9 +27,13 @@ module mojo_top (
     // The reset conditioner is used to synchronize the reset signal to the FPGA
     // clock. This ensures the entire FPGA comes out of reset at the same time.
     reset_conditioner reset_cond;
+    bin_to_dec digitsa (#DIGITS(4));
+    bin_to_dec digitsb (#DIGITS(4));
     .rst(rst) {
       fsm states = {START, IDLE};
       pn_gen rngesus;
+      multi_seven_seg msega; // multi_seven_seg a
+      multi_seven_seg msegb; // multi_seven_seg b
     }
     counter timingCounter (#SIZE(4), #TOP(9), #DIV(26));
   }
@@ -52,6 +60,10 @@ module mojo_top (
     io_led = 3x{{8h00}};    // turn LEDs off
     io_seg = 8hff;          // turn segments off
     io_sel = 4hf;           // select no digits
+    a_seg = 8hff;           // turn off segs
+    a_sel = 4hf;            // select no digits
+    b_seg = 8hff;           // turn off segs
+    b_sel = 4hf;            // select no digits
     alu1.alufn = 0; // Sets alufn, a and b as 0 values on initializing
     alu1.a = 0;
     alu1.b = 0;
@@ -62,6 +74,19 @@ module mojo_top (
     io_seg = ~seg.segs;
     io_sel = ~4h1;
     
+    
+    digitsa.value = rngesus.num[7:0]; // collect a's values
+    msega.values = digitsa.digits;    // convert a's values into an array of decimal numbers
+    
+    a_seg = msega.seg;                // output multi seven seg into a_seg
+    a_sel = ~msega.sel;               // cycles and shifts the numbers to display the required number
+    
+    digitsb.value = rngesus.num[15:8];
+    msegb.values = digitsb.digits;
+    
+    b_seg = msegb.seg;
+    b_sel = ~msegb.sel;
+    
     if (states.q == states.START) {
       led = rngesus.num[21:16];
        if (rngesus.num[21:16] == b000010) { // multiply
@@ -69,12 +94,12 @@ module mojo_top (
         seg.char = 9 - timingCounter.value;
         alu1.alufn = b000010;  // configures them to have these values now
         alu1.a = rngesus.num[3:0];
-        alu1.b = rngesus.num[7:4];
+        alu1.b = rngesus.num[11:8];
         alu = alu1.alu;
         io_led[0] = rngesus.num[3:0];
         io_led[1] = b000010; 
         io_led[2] = rngesus.num[7:4];
-        if (timingCounter.value < 9 && io_dip[1] == alu) {
+        if (timingCounter.value < 9) {
           states.d = states.IDLE;
           led[0] = 1;
         }
@@ -88,11 +113,13 @@ module mojo_top (
         alu1.alufn = rngesus.num[21:16];
         alu1.a = rngesus.num[7:0];
         alu1.b = rngesus.num[15:8];
+        
+        
         alu = alu1.alu;
         io_led[0] = rngesus.num[7:0];
         io_led[1] = rngesus.num[21:16];  
         io_led[2] = rngesus.num[15:8]; // test purposes
-        if (timingCounter.value < 9 && io_dip[1] == alu) {
+        if (timingCounter.value < 9) {
           states.d = states.IDLE;
           led[0] = 1;
         }
@@ -111,7 +138,7 @@ module mojo_top (
           io_led[2] = rngesus.num[7:0];
           io_led[1] = rngesus.num[21:16];
           io_led[0] = rngesus.num[15:8]; // test purposes
-          if (timingCounter.value < 9 && io_dip[1] == alu) {
+          if (timingCounter.value < 9) {
             states.d = states.IDLE;
             led[0] = 1;
           }
@@ -129,7 +156,7 @@ module mojo_top (
           io_led[0] = rngesus.num[7:0];
           io_led[1] = rngesus.num[21:16];
           io_led[2] = rngesus.num[15:8]; // test purposes
-          if (timingCounter.value < 9 && io_dip[1] == alu) {
+          if (timingCounter.value < 9) {
             states.d = states.IDLE;
             led[0] = 1;
           }
