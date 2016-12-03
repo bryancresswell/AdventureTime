@@ -1,8 +1,9 @@
 //! **************************************************************************
-// Written by: Map P.20131013 on Fri Dec 02 05:51:40 2016
+// Written by: Map P.20131013 on Sat Dec 03 23:32:38 2016
 //! **************************************************************************
 
 SCHEMATIC START;
+CONFIG VCCAUX = "3.3";
 COMP "clk" LOCATE = SITE "P56" LEVEL 1;
 COMP "io_button(0)" LOCATE = SITE "P137" LEVEL 1;
 COMP "io_button(2)" LOCATE = SITE "P139" LEVEL 1;

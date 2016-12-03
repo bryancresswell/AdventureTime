@@ -14,6 +14,7 @@ module mojo_top (
     output io_led [3][8],   // LEDs on IO Shield
     output io_seg [8],      // 7-segment LEDs on IO Shield
     output io_sel [4],      // Digit select on IO Shield
+    //// 1. output a seg, a sel and b seg, b sel
     output a_seg [8],       // 7-segment external A
     output a_sel [4],       // 7-segment external sel A
     output b_seg [8],       // 7-segment external B
@@ -27,11 +28,13 @@ module mojo_top (
     // The reset conditioner is used to synchronize the reset signal to the FPGA
     // clock. This ensures the entire FPGA comes out of reset at the same time.
     reset_conditioner reset_cond;
+    //// 2. initialise converter of numbers to an array of decimals
     bin_to_dec digitsa (#DIGITS(4));
     bin_to_dec digitsb (#DIGITS(4));
     .rst(rst) {
       fsm states = {START, IDLE};
       pn_gen rngesus;
+      //// 1.instantiate multi seven segs
       multi_seven_seg msega; // multi_seven_seg a
       multi_seven_seg msegb; // multi_seven_seg b
     }
@@ -60,6 +63,7 @@ module mojo_top (
     io_led = 3x{{8h00}};    // turn LEDs off
     io_seg = 8hff;          // turn segments off
     io_sel = 4hf;           // select no digits
+    //// 3. switch off the external segments 
     a_seg = 8hff;           // turn off segs
     a_sel = 4hf;            // select no digits
     b_seg = 8hff;           // turn off segs
@@ -73,17 +77,19 @@ module mojo_top (
     
     io_seg = ~seg.segs;
     io_sel = ~4h1;
-    
-    
+    //// main code block for display from here to...
+    //// input the a values into digitsa
     digitsa.value = rngesus.num[7:0]; // collect a's values
+    //// input the digit array into msega
     msega.values = digitsa.digits;    // convert a's values into an array of decimal numbers
-    
+    //// code block for displaying a
     a_seg = msega.seg;                // output multi seven seg into a_seg
     a_sel = ~msega.sel;               // cycles and shifts the numbers to display the required number
     
+    //// rinse and repeat for msegb
     digitsb.value = rngesus.num[15:8];
     msegb.values = digitsb.digits;
-    
+    //// ...here
     b_seg = msegb.seg;
     b_sel = ~msegb.sel;
     

@@ -5,7 +5,7 @@ C:\Xilinx\14.7\ISE_DS\ISE\.
    "mojo_top_0" is an NCD, version 3.2, device xc6slx9, package tqg144, speed -2
 Opened constraints file mojo_top_0.pcf.
 
-Fri Dec 02 05:51:54 2016
+Sat Dec 03 23:33:02 2016
 
 C:\Xilinx\14.7\ISE_DS\ISE\bin\nt64\unwrapped\bitgen.exe -g Binary:Yes -g Compress -w -intstyle pa mojo_top_0_routed.ncd mojo_top_0.bit mojo_top_0.pcf 
 
@@ -124,8 +124,9 @@ Summary of Bitgen Options:
  *  Default setting.
  ** The specified setting matches the default setting.
 
-There were 0 CONFIG constraint(s) processed from mojo_top_0.pcf.
+There were 1 CONFIG constraint(s) processed from mojo_top_0.pcf.
 
+   CONFIG VCCAUX = "3.3"
 
 Running DRC.
 DRC detected 0 errors and 0 warnings.
