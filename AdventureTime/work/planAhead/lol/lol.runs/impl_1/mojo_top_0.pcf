@@ -1,14 +1,14 @@
 //! **************************************************************************
-// Written by: Map P.20131013 on Thu Dec 01 19:42:07 2016
+// Written by: Map P.20131013 on Fri Dec 02 06:24:16 2016
 //! **************************************************************************
 
 SCHEMATIC START;
 COMP "clk" LOCATE = SITE "P56" LEVEL 1;
 COMP "io_button(0)" LOCATE = SITE "P137" LEVEL 1;
-COMP "io_button(2)" LOCATE = SITE "P139" LEVEL 1;
-COMP "io_button(3)" LOCATE = SITE "P142" LEVEL 1;
 COMP "io_button(4)" LOCATE = SITE "P138" LEVEL 1;
 COMP "io_button[1]" LOCATE = SITE "P140" LEVEL 1;
+COMP "io_button[2]" LOCATE = SITE "P139" LEVEL 1;
+COMP "io_button[3]" LOCATE = SITE "P142" LEVEL 1;
 COMP "cclk" LOCATE = SITE "P70" LEVEL 1;
 COMP "io_dip(0)" LOCATE = SITE "P120" LEVEL 1;
 COMP "io_dip(1)" LOCATE = SITE "P121" LEVEL 1;
@@ -57,7 +57,6 @@ COMP "io_dip(20)" LOCATE = SITE "P67" LEVEL 1;
 COMP "io_dip(21)" LOCATE = SITE "P66" LEVEL 1;
 COMP "io_dip(22)" LOCATE = SITE "P58" LEVEL 1;
 COMP "io_dip(23)" LOCATE = SITE "P57" LEVEL 1;
-COMP "io_dip(16)" LOCATE = SITE "P79" LEVEL 1;
 COMP "io_dip(17)" LOCATE = SITE "P78" LEVEL 1;
 COMP "io_dip(18)" LOCATE = SITE "P75" LEVEL 1;
 COMP "io_dip(19)" LOCATE = SITE "P74" LEVEL 1;
@@ -68,6 +67,7 @@ COMP "io_dip[12]" LOCATE = SITE "P102" LEVEL 1;
 COMP "io_dip[13]" LOCATE = SITE "P101" LEVEL 1;
 COMP "io_dip[14]" LOCATE = SITE "P100" LEVEL 1;
 COMP "io_dip[15]" LOCATE = SITE "P99" LEVEL 1;
+COMP "io_dip[16]" LOCATE = SITE "P79" LEVEL 1;
 COMP "spi_ss" LOCATE = SITE "P48" LEVEL 1;
 COMP "io_led[10]" LOCATE = SITE "P82" LEVEL 1;
 COMP "io_led[11]" LOCATE = SITE "P83" LEVEL 1;
@@ -84,68 +84,69 @@ COMP "io_led[17]" LOCATE = SITE "P16" LEVEL 1;
 COMP "io_led[18]" LOCATE = SITE "P17" LEVEL 1;
 COMP "io_led[19]" LOCATE = SITE "P21" LEVEL 1;
 COMP "spi_mosi" LOCATE = SITE "P44" LEVEL 1;
-TIMEGRP clk = BEL "M_states_q" BEL "M_states_q_1" BEL "clk_BUFGP/BUFG" BEL
+TIMEGRP clk = BEL "M_hp_q_0" BEL "M_hp_q_7" BEL "M_states_q_FSM_FFd2" BEL
+        "M_states_q_FSM_FFd1" BEL "M_states_q_FSM_FFd1_1" BEL
+        "M_states_q_FSM_FFd2_1" BEL "clk_BUFGP/BUFG" BEL
         "reset_cond/M_stage_q_3" BEL "reset_cond/M_stage_q_2" BEL
         "reset_cond/M_stage_q_1" BEL "reset_cond/M_stage_q_0" BEL
-        "rngesus/M_y_q_31" BEL "rngesus/M_y_q_29" BEL "rngesus/M_y_q_28" BEL
-        "rngesus/M_y_q_27" BEL "rngesus/M_y_q_26" BEL "rngesus/M_y_q_24" BEL
-        "rngesus/M_y_q_23" BEL "rngesus/M_y_q_22" BEL "rngesus/M_y_q_18" BEL
-        "rngesus/M_y_q_15" BEL "rngesus/M_y_q_12" BEL "rngesus/M_y_q_11" BEL
-        "rngesus/M_y_q_10" BEL "rngesus/M_y_q_8" BEL "rngesus/M_y_q_7" BEL
-        "rngesus/M_y_q_6" BEL "rngesus/M_y_q_4" BEL "rngesus/M_y_q_3" BEL
-        "rngesus/M_y_q_1" BEL "rngesus/M_z_q_31" BEL "rngesus/M_z_q_30" BEL
-        "rngesus/M_z_q_26" BEL "rngesus/M_z_q_24" BEL "rngesus/M_z_q_23" BEL
+        "reset_cond/M_stage_q_3_1" BEL "rngesus/M_y_q_31" BEL
+        "rngesus/M_y_q_30" BEL "rngesus/M_y_q_29" BEL "rngesus/M_y_q_28" BEL
+        "rngesus/M_y_q_27" BEL "rngesus/M_y_q_26" BEL "rngesus/M_y_q_25" BEL
+        "rngesus/M_y_q_24" BEL "rngesus/M_y_q_23" BEL "rngesus/M_y_q_22" BEL
+        "rngesus/M_y_q_21" BEL "rngesus/M_y_q_20" BEL "rngesus/M_y_q_19" BEL
+        "rngesus/M_y_q_18" BEL "rngesus/M_y_q_17" BEL "rngesus/M_y_q_16" BEL
+        "rngesus/M_y_q_15" BEL "rngesus/M_y_q_14" BEL "rngesus/M_y_q_13" BEL
+        "rngesus/M_y_q_12" BEL "rngesus/M_y_q_11" BEL "rngesus/M_y_q_10" BEL
+        "rngesus/M_y_q_9" BEL "rngesus/M_y_q_8" BEL "rngesus/M_y_q_7" BEL
+        "rngesus/M_y_q_6" BEL "rngesus/M_y_q_5" BEL "rngesus/M_y_q_4" BEL
+        "rngesus/M_y_q_3" BEL "rngesus/M_y_q_2" BEL "rngesus/M_y_q_1" BEL
+        "rngesus/M_y_q_0" BEL "rngesus/M_z_q_31" BEL "rngesus/M_z_q_30" BEL
+        "rngesus/M_z_q_29" BEL "rngesus/M_z_q_28" BEL "rngesus/M_z_q_27" BEL
+        "rngesus/M_z_q_26" BEL "rngesus/M_z_q_25" BEL "rngesus/M_z_q_24" BEL
+        "rngesus/M_z_q_23" BEL "rngesus/M_z_q_22" BEL "rngesus/M_z_q_21" BEL
         "rngesus/M_z_q_20" BEL "rngesus/M_z_q_19" BEL "rngesus/M_z_q_18" BEL
-        "rngesus/M_z_q_17" BEL "rngesus/M_z_q_15" BEL "rngesus/M_z_q_14" BEL
-        "rngesus/M_z_q_10" BEL "rngesus/M_z_q_9" BEL "rngesus/M_z_q_7" BEL
-        "rngesus/M_z_q_4" BEL "rngesus/M_z_q_3" BEL "rngesus/M_z_q_0" BEL
-        "rngesus/M_w_q_30" BEL "rngesus/M_w_q_29" BEL "rngesus/M_w_q_28" BEL
-        "rngesus/M_w_q_27" BEL "rngesus/M_w_q_25" BEL "rngesus/M_w_q_24" BEL
-        "rngesus/M_w_q_23" BEL "rngesus/M_w_q_22" BEL "rngesus/M_w_q_19" BEL
-        "rngesus/M_w_q_18" BEL "rngesus/M_w_q_16" BEL "rngesus/M_w_q_15" BEL
-        "rngesus/M_w_q_14" BEL "rngesus/M_w_q_11" BEL "rngesus/M_w_q_10" BEL
-        "rngesus/M_w_q_7" BEL "rngesus/M_w_q_5" BEL "rngesus/M_w_q_3" BEL
-        "rngesus/M_w_q_2" BEL "rngesus/M_w_q_0" BEL "rngesus/M_x_q_31" BEL
-        "rngesus/M_x_q_28" BEL "rngesus/M_x_q_27" BEL "rngesus/M_x_q_26" BEL
-        "rngesus/M_x_q_24" BEL "rngesus/M_x_q_23" BEL "rngesus/M_x_q_21" BEL
-        "rngesus/M_x_q_18" BEL "rngesus/M_x_q_17" BEL "rngesus/M_x_q_15" BEL
-        "rngesus/M_x_q_14" BEL "rngesus/M_x_q_12" BEL "rngesus/M_x_q_9" BEL
-        "rngesus/M_x_q_8" BEL "rngesus/M_x_q_7" BEL "rngesus/M_x_q_4" BEL
-        "rngesus/M_x_q_3" BEL "rngesus/M_x_q_2" BEL "rngesus/M_x_q_0" BEL
-        "rngesus/M_y_q_30" BEL "rngesus/M_y_q_25" BEL "rngesus/M_y_q_21" BEL
-        "rngesus/M_y_q_20" BEL "rngesus/M_y_q_19" BEL "rngesus/M_y_q_17" BEL
-        "rngesus/M_y_q_16" BEL "rngesus/M_y_q_14" BEL "rngesus/M_y_q_13" BEL
-        "rngesus/M_y_q_9" BEL "rngesus/M_y_q_5" BEL "rngesus/M_y_q_2" BEL
-        "rngesus/M_y_q_0" BEL "rngesus/M_z_q_29" BEL "rngesus/M_z_q_28" BEL
-        "rngesus/M_z_q_27" BEL "rngesus/M_z_q_25" BEL "rngesus/M_z_q_22" BEL
-        "rngesus/M_z_q_21" BEL "rngesus/M_z_q_16" BEL "rngesus/M_z_q_13" BEL
-        "rngesus/M_z_q_12" BEL "rngesus/M_z_q_11" BEL "rngesus/M_z_q_8" BEL
-        "rngesus/M_z_q_6" BEL "rngesus/M_z_q_5" BEL "rngesus/M_z_q_2" BEL
-        "rngesus/M_z_q_1" BEL "rngesus/M_w_q_31" BEL "rngesus/M_w_q_26" BEL
-        "rngesus/M_w_q_21" BEL "rngesus/M_w_q_20" BEL "rngesus/M_w_q_17" BEL
-        "rngesus/M_w_q_13" BEL "rngesus/M_w_q_12" BEL "rngesus/M_w_q_9" BEL
-        "rngesus/M_w_q_8" BEL "rngesus/M_w_q_6" BEL "rngesus/M_w_q_4" BEL
-        "rngesus/M_w_q_1" BEL "rngesus/M_x_q_30" BEL "rngesus/M_x_q_29" BEL
-        "rngesus/M_x_q_25" BEL "rngesus/M_x_q_22" BEL "rngesus/M_x_q_20" BEL
-        "rngesus/M_x_q_19" BEL "rngesus/M_x_q_16" BEL "rngesus/M_x_q_13" BEL
-        "rngesus/M_x_q_11" BEL "rngesus/M_x_q_10" BEL "rngesus/M_x_q_6" BEL
-        "rngesus/M_x_q_5" BEL "rngesus/M_x_q_1" BEL "rngesus/M_w_q_17_1" BEL
-        "rngesus/M_w_q_16_1" BEL "timingCounter/M_ctr_q_2" BEL
-        "timingCounter/M_ctr_q_0" BEL "timingCounter/M_ctr_q_1" BEL
+        "rngesus/M_z_q_17" BEL "rngesus/M_z_q_16" BEL "rngesus/M_z_q_15" BEL
+        "rngesus/M_z_q_14" BEL "rngesus/M_z_q_13" BEL "rngesus/M_z_q_12" BEL
+        "rngesus/M_z_q_11" BEL "rngesus/M_z_q_10" BEL "rngesus/M_z_q_9" BEL
+        "rngesus/M_z_q_8" BEL "rngesus/M_z_q_7" BEL "rngesus/M_z_q_6" BEL
+        "rngesus/M_z_q_5" BEL "rngesus/M_z_q_4" BEL "rngesus/M_z_q_3" BEL
+        "rngesus/M_z_q_2" BEL "rngesus/M_z_q_1" BEL "rngesus/M_z_q_0" BEL
+        "rngesus/M_w_q_31" BEL "rngesus/M_w_q_30" BEL "rngesus/M_w_q_29" BEL
+        "rngesus/M_w_q_28" BEL "rngesus/M_w_q_27" BEL "rngesus/M_w_q_26" BEL
+        "rngesus/M_w_q_25" BEL "rngesus/M_w_q_24" BEL "rngesus/M_w_q_23" BEL
+        "rngesus/M_w_q_22" BEL "rngesus/M_w_q_21" BEL "rngesus/M_w_q_20" BEL
+        "rngesus/M_w_q_19" BEL "rngesus/M_w_q_18" BEL "rngesus/M_w_q_17" BEL
+        "rngesus/M_w_q_16" BEL "rngesus/M_w_q_15" BEL "rngesus/M_w_q_14" BEL
+        "rngesus/M_w_q_13" BEL "rngesus/M_w_q_12" BEL "rngesus/M_w_q_11" BEL
+        "rngesus/M_w_q_10" BEL "rngesus/M_w_q_9" BEL "rngesus/M_w_q_8" BEL
+        "rngesus/M_w_q_7" BEL "rngesus/M_w_q_6" BEL "rngesus/M_w_q_5" BEL
+        "rngesus/M_w_q_4" BEL "rngesus/M_w_q_3" BEL "rngesus/M_w_q_2" BEL
+        "rngesus/M_w_q_1" BEL "rngesus/M_w_q_0" BEL "rngesus/M_x_q_31" BEL
+        "rngesus/M_x_q_30" BEL "rngesus/M_x_q_29" BEL "rngesus/M_x_q_28" BEL
+        "rngesus/M_x_q_27" BEL "rngesus/M_x_q_26" BEL "rngesus/M_x_q_25" BEL
+        "rngesus/M_x_q_24" BEL "rngesus/M_x_q_23" BEL "rngesus/M_x_q_22" BEL
+        "rngesus/M_x_q_21" BEL "rngesus/M_x_q_20" BEL "rngesus/M_x_q_19" BEL
+        "rngesus/M_x_q_18" BEL "rngesus/M_x_q_17" BEL "rngesus/M_x_q_16" BEL
+        "rngesus/M_x_q_15" BEL "rngesus/M_x_q_14" BEL "rngesus/M_x_q_13" BEL
+        "rngesus/M_x_q_12" BEL "rngesus/M_x_q_11" BEL "rngesus/M_x_q_10" BEL
+        "rngesus/M_x_q_9" BEL "rngesus/M_x_q_8" BEL "rngesus/M_x_q_7" BEL
+        "rngesus/M_x_q_6" BEL "rngesus/M_x_q_5" BEL "rngesus/M_x_q_4" BEL
+        "rngesus/M_x_q_3" BEL "rngesus/M_x_q_2" BEL "rngesus/M_x_q_1" BEL
+        "rngesus/M_x_q_0" BEL "timingCounter/M_ctr_q_0" BEL
+        "timingCounter/M_ctr_q_1" BEL "timingCounter/M_ctr_q_2" BEL
         "timingCounter/M_ctr_q_3" BEL "timingCounter/M_ctr_q_4" BEL
-        "timingCounter/M_ctr_q_7" BEL "timingCounter/M_ctr_q_5" BEL
-        "timingCounter/M_ctr_q_6" BEL "timingCounter/M_ctr_q_8" BEL
-        "timingCounter/M_ctr_q_9" BEL "timingCounter/M_ctr_q_12" BEL
-        "timingCounter/M_ctr_q_10" BEL "timingCounter/M_ctr_q_11" BEL
+        "timingCounter/M_ctr_q_5" BEL "timingCounter/M_ctr_q_6" BEL
+        "timingCounter/M_ctr_q_7" BEL "timingCounter/M_ctr_q_8" BEL
+        "timingCounter/M_ctr_q_9" BEL "timingCounter/M_ctr_q_10" BEL
+        "timingCounter/M_ctr_q_11" BEL "timingCounter/M_ctr_q_12" BEL
         "timingCounter/M_ctr_q_13" BEL "timingCounter/M_ctr_q_14" BEL
-        "timingCounter/M_ctr_q_17" BEL "timingCounter/M_ctr_q_15" BEL
-        "timingCounter/M_ctr_q_16" BEL "timingCounter/M_ctr_q_18" BEL
-        "timingCounter/M_ctr_q_19" BEL "timingCounter/M_ctr_q_22" BEL
-        "timingCounter/M_ctr_q_20" BEL "timingCounter/M_ctr_q_21" BEL
+        "timingCounter/M_ctr_q_15" BEL "timingCounter/M_ctr_q_16" BEL
+        "timingCounter/M_ctr_q_17" BEL "timingCounter/M_ctr_q_18" BEL
+        "timingCounter/M_ctr_q_19" BEL "timingCounter/M_ctr_q_20" BEL
+        "timingCounter/M_ctr_q_21" BEL "timingCounter/M_ctr_q_22" BEL
         "timingCounter/M_ctr_q_23" BEL "timingCounter/M_ctr_q_24" BEL
-        "timingCounter/M_ctr_q_27" BEL "timingCounter/M_ctr_q_25" BEL
-        "timingCounter/M_ctr_q_28" BEL "timingCounter/M_ctr_q_29" BEL
-        "timingCounter/M_ctr_q_26";
+        "timingCounter/M_ctr_q_25" BEL "timingCounter/M_ctr_q_26" BEL
+        "timingCounter/M_ctr_q_27" BEL "timingCounter/M_ctr_q_28";
 TS_clk = PERIOD TIMEGRP "clk" 50 MHz HIGH 50%;
 SCHEMATIC END;
 

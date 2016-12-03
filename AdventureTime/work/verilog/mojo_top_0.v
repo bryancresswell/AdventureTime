@@ -35,10 +35,12 @@ module mojo_top_0 (
     .in(M_reset_cond_in),
     .out(M_reset_cond_out)
   );
-  localparam START_states = 1'd0;
-  localparam IDLE_states = 1'd1;
+  localparam BEGIN_states = 2'd0;
+  localparam START_states = 2'd1;
+  localparam IDLE_states = 2'd2;
+  localparam SCORE_states = 2'd3;
   
-  reg M_states_d, M_states_q = START_states;
+  reg [1:0] M_states_d, M_states_q = BEGIN_states;
   wire [32-1:0] M_rngesus_num;
   reg [1-1:0] M_rngesus_next;
   reg [32-1:0] M_rngesus_seed;
@@ -49,6 +51,7 @@ module mojo_top_0 (
     .seed(M_rngesus_seed),
     .num(M_rngesus_num)
   );
+  reg [7:0] M_hp_d, M_hp_q = 1'h0;
   wire [4-1:0] M_timingCounter_value;
   reg [1-1:0] M_timingCounter_rst;
   counter_3 timingCounter (
@@ -64,12 +67,6 @@ module mojo_top_0 (
     .char(M_seg_char),
     .segs(M_seg_segs)
   );
-  
-  reg [5:0] alufn;
-  
-  reg [7:0] a;
-  
-  reg [7:0] b;
   
   reg [7:0] alu;
   
@@ -92,8 +89,11 @@ module mojo_top_0 (
     .subtractionOverFLow(M_alu1_subtractionOverFLow)
   );
   
+  reg [7:0] p;
+  
   always @* begin
     M_states_d = M_states_q;
+    M_hp_d = M_hp_q;
     
     M_reset_cond_in = ~rst_n;
     rst = M_reset_cond_out;
@@ -106,102 +106,80 @@ module mojo_top_0 (
     io_led = 24'h000000;
     io_seg = 8'hff;
     io_sel = 4'hf;
-    M_alu1_alufn = 1'h0;
-    M_alu1_a = 1'h0;
-    M_alu1_b = 1'h0;
-    alu = M_alu1_alu;
     M_timingCounter_rst = 1'h1;
     M_seg_char = 1'h0;
     io_seg = ~M_seg_segs;
+    M_hp_d = 8'hff;
     io_sel = 4'he;
-    if (M_states_q == START_states) begin
-      led = M_rngesus_num[16+5-:6];
-      if (M_rngesus_num[16+5-:6] == 6'h02) begin
+    io_led[0+7-:8] = M_hp_q;
+    alu = M_alu1_alu;
+    p = io_dip[8+7-:8];
+    if (M_states_q == BEGIN_states) begin
+      if (io_button[1+0-:1]) begin
+        M_states_d = START_states;
+      end
+    end else begin
+      if (M_states_q == START_states) begin
         M_timingCounter_rst = 1'h0;
-        M_seg_char = 4'h9 - M_timingCounter_value;
-        M_alu1_alufn = 6'h02;
-        M_alu1_a = M_rngesus_num[0+3-:4];
-        M_alu1_b = M_rngesus_num[4+3-:4];
-        alu = M_alu1_alu;
-        io_led[0+7-:8] = M_rngesus_num[0+3-:4];
-        io_led[8+7-:8] = 6'h02;
-        io_led[16+7-:8] = M_rngesus_num[4+3-:4];
-        if (M_timingCounter_value < 4'h9 && io_dip[8+7-:8] == alu) begin
+        M_seg_char = 4'h8 - M_timingCounter_value;
+        io_led[0+7-:8] = M_hp_q;
+        
+        case (M_rngesus_num[16+1-:2])
+          2'h1: begin
+            M_alu1_alufn = 6'h02;
+            M_alu1_a = M_rngesus_num[0+3-:4];
+            M_alu1_b = M_rngesus_num[4+3-:4];
+          end
+          2'h0: begin
+            M_alu1_alufn = 6'h00;
+            M_alu1_a = M_rngesus_num[0+7-:8];
+            M_alu1_b = M_rngesus_num[8+7-:8];
+          end
+          2'h1: begin
+            if (M_rngesus_num[0+7-:8] < M_rngesus_num[8+7-:8]) begin
+              M_alu1_alufn = 6'h01;
+              M_alu1_a = M_rngesus_num[8+7-:8];
+              M_alu1_b = M_rngesus_num[0+7-:8];
+            end else begin
+              M_alu1_alufn = 6'h01;
+              M_alu1_a = M_rngesus_num[8+7-:8];
+              M_alu1_b = M_rngesus_num[0+7-:8];
+            end
+          end
+          default: begin
+            M_alu1_alufn = 6'h00;
+            M_alu1_a = M_rngesus_num[0+6-:7];
+            M_alu1_b = M_rngesus_num[7+6-:7];
+          end
+        endcase
+        if (p == alu && io_dip[16+0+0-:1] == 1'h1) begin
           M_states_d = IDLE_states;
-          led[0+0-:1] = 1'h1;
         end else begin
-          if (M_timingCounter_value == 4'h9) begin
-            M_states_d = IDLE_states;
+          if (p != alu && io_dip[16+0+0-:1] == 1'h1) begin
+            M_states_d = SCORE_states;
+          end else begin
+            if (M_timingCounter_value == 4'h9) begin
+              M_states_d = SCORE_states;
+            end
           end
         end
       end else begin
-        if (M_rngesus_num[16+5-:6] == 6'h00) begin
-          M_timingCounter_rst = 1'h0;
-          M_seg_char = 4'h9 - M_timingCounter_value;
-          M_alu1_alufn = M_rngesus_num[16+5-:6];
-          M_alu1_a = M_rngesus_num[0+7-:8];
-          M_alu1_b = M_rngesus_num[8+7-:8];
-          alu = M_alu1_alu;
-          io_led[0+7-:8] = M_rngesus_num[0+7-:8];
-          io_led[8+7-:8] = M_rngesus_num[16+5-:6];
-          io_led[16+7-:8] = M_rngesus_num[8+7-:8];
-          if (M_timingCounter_value < 4'h9 && io_dip[8+7-:8] == alu) begin
-            M_states_d = IDLE_states;
-            led[0+0-:1] = 1'h1;
-          end else begin
-            if (M_timingCounter_value == 4'h9) begin
-              M_states_d = IDLE_states;
-            end
-          end
-        end else begin
-          if (M_rngesus_num[16+5-:6] == 6'h01) begin
-            if (M_rngesus_num[0+7-:8] < M_rngesus_num[8+7-:8]) begin
-              M_timingCounter_rst = 1'h0;
-              M_seg_char = 4'h9 - M_timingCounter_value;
-              M_alu1_alufn = M_rngesus_num[16+5-:6];
-              M_alu1_a = M_rngesus_num[8+7-:8];
-              M_alu1_b = M_rngesus_num[0+7-:8];
-              alu = M_alu1_alu;
-              io_led[16+7-:8] = M_rngesus_num[0+7-:8];
-              io_led[8+7-:8] = M_rngesus_num[16+5-:6];
-              io_led[0+7-:8] = M_rngesus_num[8+7-:8];
-              if (M_timingCounter_value < 4'h9 && io_dip[8+7-:8] == alu) begin
-                M_states_d = IDLE_states;
-                led[0+0-:1] = 1'h1;
-              end else begin
-                if (M_timingCounter_value == 4'h9) begin
-                  M_states_d = IDLE_states;
-                end
-              end
-            end else begin
-              M_timingCounter_rst = 1'h0;
-              M_seg_char = 4'h9 - M_timingCounter_value;
-              M_alu1_alufn = M_rngesus_num[16+5-:6];
-              M_alu1_a = M_rngesus_num[8+7-:8];
-              M_alu1_b = M_rngesus_num[0+7-:8];
-              alu = M_alu1_alu;
-              io_led[0+7-:8] = M_rngesus_num[0+7-:8];
-              io_led[8+7-:8] = M_rngesus_num[16+5-:6];
-              io_led[16+7-:8] = M_rngesus_num[8+7-:8];
-              if (M_timingCounter_value < 4'h9 && io_dip[8+7-:8] == alu) begin
-                M_states_d = IDLE_states;
-                led[0+0-:1] = 1'h1;
-              end else begin
-                if (M_timingCounter_value == 4'h9) begin
-                  M_states_d = IDLE_states;
-                end
-              end
-            end
-          end else begin
+        if (M_states_q == IDLE_states) begin
+          led[1+0-:1] = 1'h1;
+          io_led[0+7-:8] = M_hp_q;
+          if (io_button[2+0-:1]) begin
+            M_states_d = START_states;
             M_rngesus_next = 1'h1;
           end
-        end
-      end
-    end else begin
-      if (M_states_q == IDLE_states) begin
-        if (io_button[1+0-:1]) begin
-          M_states_d = START_states;
-          M_rngesus_next = 1'h1;
+        end else begin
+          if (M_states_q == SCORE_states) begin
+            led[2+0-:1] = 1'h1;
+            if (io_button[3+0-:1]) begin
+              M_hp_d = M_hp_q >> 1'h1;
+              M_states_d = START_states;
+              M_rngesus_next = 1'h1;
+            end
+          end
         end
       end
     end
@@ -209,8 +187,10 @@ module mojo_top_0 (
   
   always @(posedge clk) begin
     if (rst == 1'b1) begin
+      M_hp_q <= 1'h0;
       M_states_q <= 1'h0;
     end else begin
+      M_hp_q <= M_hp_d;
       M_states_q <= M_states_d;
     end
   end

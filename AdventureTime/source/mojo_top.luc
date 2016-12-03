@@ -24,20 +24,18 @@ module mojo_top (
     // clock. This ensures the entire FPGA comes out of reset at the same time.
     reset_conditioner reset_cond;
     .rst(rst) {
-      fsm states = {START, IDLE};
+      fsm states = {BEGIN, START, IDLE, SCORE};    
       pn_gen rngesus;
-    }
-    counter timingCounter (#SIZE(4), #TOP(9), #DIV(26));
+      dff hp[8];  
+    }    
+    counter timingCounter (#SIZE(4), #TOP(9), #DIV(25));
   }
   
   sevenseg seg (.dot(0));
-
-  sig alufn[6];
-  sig a[8];
-  sig b[8];
-  sig alu[8];  
   
-  main alu1; 
+  sig alu[8];  
+  main alu1;  
+  sig p[8];
   
   always {
     reset_cond.in = ~rst_n; // input raw inverted reset signal
@@ -51,102 +49,74 @@ module mojo_top (
     rngesus.next = 0;
     io_led = 3x{{8h00}};    // turn LEDs off
     io_seg = 8hff;          // turn segments off
-    io_sel = 4hf;           // select no digits
-    alu1.alufn = 0; // Sets alufn, a and b as 0 values on initializing
-    alu1.a = 0;
-    alu1.b = 0;
-    alu = alu1.alu;
-    timingCounter.rst = 1;
+    io_sel = 4hf;              // select no digits
+    timingCounter.rst = 1;        
     seg.char = 0;
-    
     io_seg = ~seg.segs;
+    hp.d = 8b11111111;
     io_sel = ~4h1;
-    
-    if (states.q == states.START) {
-      led = rngesus.num[21:16];
-       if (rngesus.num[21:16] == b000010) { // multiply
-        timingCounter.rst = 0;
-        seg.char = 9 - timingCounter.value;
-        alu1.alufn = b000010;  // configures them to have these values now
-        alu1.a = rngesus.num[3:0];
-        alu1.b = rngesus.num[7:4];
-        alu = alu1.alu;
-        io_led[0] = rngesus.num[3:0];
-        io_led[1] = b000010; 
-        io_led[2] = rngesus.num[7:4];
-        if (timingCounter.value < 9 && io_dip[1] == alu) {
+    io_led[0] = hp.q;
+    alu = alu1.alu;    
+    p = io_dip[1];
+    if (states.q == states.BEGIN) {    
+      if (io_button[1]) { 
+        states.d = states.START;    
+      }
+    }
+    else if (states.q == states.START) {
+      timingCounter.rst = 0;
+      seg.char = 8 - timingCounter.value;
+      io_led[0] = hp.q;     
+       case (rngesus.num[17:16]) { // multiply   
+        b01:
+          alu1.alufn = b000010;  // configures them to have these values now
+          alu1.a = rngesus.num[3:0];
+          alu1.b = rngesus.num[7:4];
+        b00: // add block      
+          alu1.alufn = b000000;
+          alu1.a = rngesus.num[7:0];
+          alu1.b = rngesus.num[15:8];
+        b01:
+          if (rngesus.num[7:0] < rngesus.num[15:8]) { // subtract block swap posoition if first 8 smaller than next 8 (prevent negatives)        
+            alu1.alufn = b000001;
+            alu1.a = rngesus.num[15:8];
+            alu1.b = rngesus.num[7:0];
+          } 
+          else { // subtract block       
+            alu1.alufn = b000001;
+            alu1.a = rngesus.num[15:8];
+            alu1.b = rngesus.num[7:0];
+          }
+          default:
+            alu1.alufn = b000000;
+            alu1.a = rngesus.num[6:0];
+            alu1.b = rngesus.num[13:7];   
+        }
+        if (p == alu && io_dip[2][0] == 1) {
           states.d = states.IDLE;
-          led[0] = 1;
+        }
+        else if (p != alu && io_dip[2][0] == 1) {
+          states.d = states.SCORE;
         }
         else if (timingCounter.value == 9) {
-          states.d = states.IDLE;
+          states.d = states.SCORE;
         }
-      }
-      else if (rngesus.num[21:16] == b000000) { // add block
-        timingCounter.rst = 0;
-        seg.char = 9 - timingCounter.value;
-        alu1.alufn = rngesus.num[21:16];
-        alu1.a = rngesus.num[7:0];
-        alu1.b = rngesus.num[15:8];
-        alu = alu1.alu;
-        io_led[0] = rngesus.num[7:0];
-        io_led[1] = rngesus.num[21:16];  
-        io_led[2] = rngesus.num[15:8]; // test purposes
-        if (timingCounter.value < 9 && io_dip[1] == alu) {
-          states.d = states.IDLE;
-          led[0] = 1;
-        }
-        else if (timingCounter.value == 9) {
-          states.d = states.IDLE;
-        }
-      }
-      else if (rngesus.num[21:16] == b000001) {
-        if (rngesus.num[7:0] < rngesus.num[15:8]) { // subtract block swap posoition if first 8 smaller than next 8 (prevent negatives)
-          timingCounter.rst = 0;
-          seg.char = 9 - timingCounter.value;
-          alu1.alufn = rngesus.num[21:16];
-          alu1.a = rngesus.num[15:8];
-          alu1.b = rngesus.num[7:0];
-          alu = alu1.alu;
-          io_led[2] = rngesus.num[7:0];
-          io_led[1] = rngesus.num[21:16];
-          io_led[0] = rngesus.num[15:8]; // test purposes
-          if (timingCounter.value < 9 && io_dip[1] == alu) {
-            states.d = states.IDLE;
-            led[0] = 1;
-          }
-          else if (timingCounter.value == 9) {
-            states.d = states.IDLE;
-          }    
-        } 
-        else { // subtract block
-          timingCounter.rst = 0;
-          seg.char = 9 - timingCounter.value;
-          alu1.alufn = rngesus.num[21:16];
-          alu1.a = rngesus.num[15:8];
-          alu1.b = rngesus.num[7:0];
-          alu = alu1.alu;
-          io_led[0] = rngesus.num[7:0];
-          io_led[1] = rngesus.num[21:16];
-          io_led[2] = rngesus.num[15:8]; // test purposes
-          if (timingCounter.value < 9 && io_dip[1] == alu) {
-            states.d = states.IDLE;
-            led[0] = 1;
-          }
-          else if (timingCounter.value == 9) {
-            states.d = states.IDLE;
-          }  
-        }    
-      }
-      else {
-        rngesus.next = 1;
-      }
-    } 
+      } 
     else if (states.q == states.IDLE) {
-      if ( io_button[1] ) {
+      led[1] = 1;
+      io_led[0] = hp.q;
+      if (io_button[2] ) {
         states.d = states.START;
         rngesus.next = 1;
       }
     }
+    else if (states.q == states.SCORE) {
+      led[2] = 1;          
+      if (io_button[3]) {
+        hp.d = hp.q >> 2; 
+        states.d = states.START;
+        rngesus.next = 1;
+      }
+    } 
   }  
 }      
