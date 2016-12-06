@@ -15,7 +15,11 @@ module mojo_top (
     output io_seg [8],      // 7-segment LEDs on IO Shield
     output io_sel [4],      // Digit select on IO Shield
     input io_button [5],    // 5 buttons on IO Shield
-    input io_dip [3][8]     // DIP switches on IO Shield
+    //input io_dip [3][8]     // DIP switches on IO Shield
+    output a_seg [8],
+    output a_sel [4],
+    output b_seg [8],
+    output b_sel [4]
   ) {
   sig rst;              // reset signal
   
@@ -23,19 +27,25 @@ module mojo_top (
     // The reset conditioner is used to synchronize the reset signal to the FPGA
     // clock. This ensures the entire FPGA comes out of reset at the same time.
     reset_conditioner reset_cond;
+    bin_to_dec digitsa (#DIGITS(4));
+    bin_to_dec digitsb (#DIGITS(4));
     .rst(rst) {
-      fsm states = {BEGIN, START, IDLE, SCORE};    
+      fsm states = {BEGIN, START, IDLE, SCORE, OVER};  
+      fsm hp = {EIGHT, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN};  
       pn_gen rngesus;
-      dff hp[8];  
+      multi_seven_seg msega;
+      multi_seven_seg msegb;
     }    
-    counter timingCounter (#SIZE(4), #TOP(9), #DIV(25));
+    counter timingCounter (#SIZE(5), #TOP(20), #DIV(26));
   }
   
   sevenseg seg (.dot(0));
   
   sig alu[8];  
   main alu1;  
-  sig p[8];
+  //sig p[8];
+  sig a[8];
+  sig b[8];
   
   always {
     reset_cond.in = ~rst_n; // input raw inverted reset signal
@@ -50,73 +60,159 @@ module mojo_top (
     io_led = 3x{{8h00}};    // turn LEDs off
     io_seg = 8hff;          // turn segments off
     io_sel = 4hf;              // select no digits
+    
     timingCounter.rst = 1;        
     seg.char = 0;
+    
     io_seg = ~seg.segs;
-    hp.d = 8b11111111;
     io_sel = ~4h1;
-    io_led[0] = hp.q;
-    alu = alu1.alu;    
-    p = io_dip[1];
-    if (states.q == states.BEGIN) {    
-      if (io_button[1]) { 
-        states.d = states.START;    
-      }
-    }
-    else if (states.q == states.START) {
-      timingCounter.rst = 0;
-      seg.char = 8 - timingCounter.value;
-      io_led[0] = hp.q;     
-       case (rngesus.num[17:16]) { // multiply   
-        b01:
-          alu1.alufn = b000010;  // configures them to have these values now
-          alu1.a = rngesus.num[3:0];
-          alu1.b = rngesus.num[7:4];
-        b00: // add block      
-          alu1.alufn = b000000;
-          alu1.a = rngesus.num[7:0];
-          alu1.b = rngesus.num[15:8];
-        b01:
-          if (rngesus.num[7:0] < rngesus.num[15:8]) { // subtract block swap posoition if first 8 smaller than next 8 (prevent negatives)        
-            alu1.alufn = b000001;
-            alu1.a = rngesus.num[15:8];
-            alu1.b = rngesus.num[7:0];
-          } 
-          else { // subtract block       
-            alu1.alufn = b000001;
-            alu1.a = rngesus.num[15:8];
-            alu1.b = rngesus.num[7:0];
-          }
-          default:
+      
+    alu1.a = 0;
+    alu1.b = 0;
+    alu = alu1.alu;
+    
+    a_seg = 8hff;           // turn off segs
+    a_sel = 4hf;            // select no digits
+    b_seg = 8hff;           // turn off segs
+    b_sel = 4hf;            // select no digits
+    
+    alu1.alufn = 0; // Sets alufn, a and b as 0 values on initializing
+    alu1.a = 0;
+    alu1.b = 0;
+    alu = alu1.alu;
+    
+    timingCounter.rst = 1;
+    
+    seg.char = 0;
+    io_seg = ~seg.segs;
+    io_sel = ~4h1;
+    //// main code block for display from here to...
+    //// input the a values into digitsa
+    digitsa.value = 0; // collect a's values
+    //// input the digit array into msega
+    msega.values = digitsa.digits;    // convert a's values into an array of decimal numbers
+    //// code block for displaying a
+    a_seg = msega.seg;                // output multi seven seg into a_seg
+    a_sel = ~msega.sel;               // cycles and shifts the numbers to display the required number
+    
+    //// rinse and repeat for msegb
+    digitsb.value = 0;
+    msegb.values = digitsb.digits;
+    //// ...here
+    b_seg = msegb.seg;
+    b_sel = ~msegb.sel;
+    
+    case(states.q){
+      states.BEGIN:
+        if (io_button[1] == 1){
+          states.d = states.START;
+        }
+      states.START:
+        timingCounter.rst = 0;
+        seg.char = 20 - timingCounter.value;
+        case (hp.q){
+          hp.EIGHT: 
+            io_led[0] = 8b11111111;
+          hp.SEVEN: 
+            io_led[0] = 8b01111111;
+          hp.SIX: 
+            io_led[0] = 8b00111111;
+          hp.FIVE: 
+            io_led[0] = 8b00011111;
+          hp.FOUR: 
+            io_led[0] = 8b00001111;
+          hp.THREE: 
+            io_led[0] = 8b00000111;
+          hp.TWO: 
+            io_led[0] = 8b00000011;
+          hp.ONE: 
+            io_led[0] = 8b00000001;
+        }   
+        case (rngesus.num[17:16]) { // multiply   
+          b01:
+            alu1.alufn = b000010;  // configures them to have these values now
+            a = rngesus.num[3:0];
+            b = rngesus.num[7:4];
+          b00: // add block      
             alu1.alufn = b000000;
-            alu1.a = rngesus.num[6:0];
-            alu1.b = rngesus.num[13:7];   
+            a = rngesus.num[7:0];
+            b = rngesus.num[15:8];
+          b10:
+            if (rngesus.num[7:0] < rngesus.num[15:8]) { // subtract block swap posoition if first 8 smaller than next 8 (prevent negatives)        
+              alu1.alufn = b000001;
+              a = rngesus.num[15:8];
+              b = rngesus.num[7:0];
+            } 
+            else { // subtract block       
+              alu1.alufn = b000001;
+              b = rngesus.num[15:8];
+              a = rngesus.num[7:0];
+            }
+            default:
+              alu1.alufn = b000000;
+              a = rngesus.num[6:0];
+              b = rngesus.num[13:7];   
+          }
+          alu1.a = a;
+          alu1.b = b;
+          digitsa.value = a;
+          digitsb.value = b;
+          msega.values = digitsa.digits;
+          msegb.values = digitsb.digits;
+          a_seg = msega.seg;
+          b_seg = msegb.seg;
+          a_sel = ~msega.sel;
+          b_sel = ~msegb.sel;    
+          if (timingCounter.value == 20){
+            states.d = states.SCORE;
+          }  
+          else if (io_button[0] == 1){
+            states.d = states.IDLE;
+          }
+          //if (p == alu && io_button[3] == 1) (if this is correct)
+          //if (io_button[1] == 1){
+            //states.d = states.IDLE;
+          //}
+          //p != alu && io_button[3] == 1 || (remember to add the alu check and button)
+          //else if (timingCounter.value == 20) {
+              //states.d = states.SCORE;
+          //}
+      states.IDLE:
+        if (io_button[1] == 1){ 
+          states.d = states.START;
         }
-        if (p == alu && io_dip[2][0] == 1) {
-          states.d = states.IDLE;
+      states.SCORE:
+        if (hp.q == hp.ONE){
+          states.d = states.OVER;
         }
-        else if (p != alu && io_dip[2][0] == 1) {
-          states.d = states.SCORE;
+        else{
+          if (hp.q == hp.EIGHT){
+           hp.d = hp.SEVEN;
+          }
+          else if (hp.q == hp.SEVEN){
+           hp.d = hp.SIX;
+          }
+          else if (hp.q == hp.SIX){
+           hp.d = hp.FIVE;
+          }
+          else if (hp.q == hp.FIVE){
+           hp.d = hp.FOUR;
+          }
+          else if (hp.q == hp.FOUR){
+           hp.d = hp.THREE;
+          }
+          else if (hp.q == hp.THREE){
+           hp.d = hp.TWO;
+          }
+          else if (hp.q == hp.TWO){
+           hp.d = hp.ONE;
+          }
+          states.d = states.START;
         }
-        else if (timingCounter.value == 9) {
-          states.d = states.SCORE;
-        }
-      } 
-    else if (states.q == states.IDLE) {
-      led[1] = 1;
-      io_led[0] = hp.q;
-      if (io_button[2] ) {
-        states.d = states.START;
-        rngesus.next = 1;
-      }
+      states.OVER:
+        io_led[0] = 8b11111111;
+        io_led[1] = 8b11111111;
+        io_led[2] = 8b11111111;
     }
-    else if (states.q == states.SCORE) {
-      led[2] = 1;          
-      if (io_button[3]) {
-        hp.d = hp.q >> 2; 
-        states.d = states.START;
-        rngesus.next = 1;
-      }
-    } 
   }  
-}      
+}     
