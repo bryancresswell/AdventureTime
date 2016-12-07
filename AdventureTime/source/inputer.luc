@@ -1,0 +1,21 @@
+module inputer (
+    input clk,  // clock
+    input rst,  // reset
+    input button [8],
+    output value [8]
+  ) {
+  .clk(clk){
+    edge_detector butt [8] (#RISE(1), #FALL(0));
+    button_conditioner button_cond[8];
+  .rst(rst){
+      dff v[8];
+    }
+  }
+  always {
+    button_cond.in = button;  //input raw button value
+    butt.in = button_cond.out; // debounced value of button
+    value = 0;
+    v.d = v.q ^ butt.out; //XOR THE current input and the button press
+    
+  }
+}
