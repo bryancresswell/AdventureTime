@@ -19,7 +19,17 @@ module mojo_top (
     output a_seg [8],
     output a_sel [4],
     output b_seg [8],
-    output b_sel [4]
+    output b_sel [4],
+    
+    input enterbuttons,
+    input buttons0,
+    input buttons1,
+    input buttons2,
+    input buttons3,
+    input buttons4,
+    input buttons5,
+    input buttons6,
+    input buttons7   
   ) {
   sig rst;              // reset signal
   
@@ -29,12 +39,23 @@ module mojo_top (
     reset_conditioner reset_cond;
     bin_to_dec digitsa (#DIGITS(4));
     bin_to_dec digitsb (#DIGITS(4));
+         
     .rst(rst) {
       fsm states = {BEGIN, START, IDLE, SCORE, OVER};  
       fsm hp = {EIGHT, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN};  
       pn_gen rngesus;
       multi_seven_seg msega;
       multi_seven_seg msegb;
+      
+      buttonCounter enterbutton;
+      buttonCounter button0;
+      buttonCounter button1;
+      buttonCounter button2;
+      buttonCounter button3;
+      buttonCounter button4;
+      buttonCounter button5;
+      buttonCounter button6;
+      buttonCounter button7;
     }    
     counter timingCounter (#SIZE(5), #TOP(20), #DIV(26));
   }
@@ -46,6 +67,8 @@ module mojo_top (
   //sig p[8];
   sig a[8];
   sig b[8];
+  sig sol[8];
+  sig result[8];
   
   always {
     reset_cond.in = ~rst_n; // input raw inverted reset signal
@@ -70,6 +93,8 @@ module mojo_top (
     alu1.a = 0;
     alu1.b = 0;
     alu = alu1.alu;
+    sol = 0;
+    result = 0;
     
     a_seg = 8hff;           // turn off segs
     a_sel = 4hf;            // select no digits
@@ -102,59 +127,76 @@ module mojo_top (
     b_seg = msegb.seg;
     b_sel = ~msegb.sel;
     
+    button0.button = ~buttons0;
+    button1.button = ~buttons1;
+    button2.button = ~buttons2;
+    button3.button = ~buttons3;
+    button4.button = ~buttons4;
+    button5.button = ~buttons5;
+    button6.button = ~buttons6;
+    button7.button = ~buttons7;
+    button7.button = ~buttons7;
+    enterbutton.button = ~enterbuttons;
+    //io_led[1][0] = enterbutton.count;
+    
+    //inputer.button = buttons[7:0];
+    //io_led[2] = inputer.value;
+    
     case(states.q){
       states.BEGIN:
-        if (io_button[1] == 1){
+        if (enterbutton.count){
           states.d = states.START;
         }
       states.START:
         timingCounter.rst = 0;
         seg.char = 20 - timingCounter.value;
         case (hp.q){
-          hp.EIGHT: 
-            io_led[0] = 8b11111111;
-          hp.SEVEN: 
-            io_led[0] = 8b01111111;
-          hp.SIX: 
-            io_led[0] = 8b00111111;
-          hp.FIVE: 
-            io_led[0] = 8b00011111;
-          hp.FOUR: 
-            io_led[0] = 8b00001111;
-          hp.THREE: 
-            io_led[0] = 8b00000111;
-          hp.TWO: 
-            io_led[0] = 8b00000011;
-          hp.ONE: 
-            io_led[0] = 8b00000001;
-        }   
+          hp.EIGHT: io_led[0] = 8b11111111;
+          hp.SEVEN: io_led[0] = 8b01111111; 
+          hp.SIX: io_led[0] = 8b00111111;
+          hp.FIVE: io_led[0] = 8b00011111;
+          hp.FOUR: io_led[0] = 8b00001111;
+          hp.THREE: io_led[0] = 8b00000111;
+          hp.TWO: io_led[0] = 8b00000011;
+          hp.ONE: io_led[0] = 8b00000001;
+        }
         case (rngesus.num[17:16]) { // multiply   
           b01:
+            io_led[1] = b000010;
             alu1.alufn = b000010;  // configures them to have these values now
             a = rngesus.num[3:0];
             b = rngesus.num[7:4];
-          b00: // add block      
+            result = a * b;
+          b00: // add block
+            io_led[1] = b0000000;      
             alu1.alufn = b000000;
-            a = rngesus.num[7:0];
-            b = rngesus.num[15:8];
+            a = rngesus.num[6:0];
+            b = rngesus.num[14:8];
+            result = a + b;
           b10:
             if (rngesus.num[7:0] < rngesus.num[15:8]) { // subtract block swap posoition if first 8 smaller than next 8 (prevent negatives)        
               alu1.alufn = b000001;
-              a = rngesus.num[15:8];
-              b = rngesus.num[7:0];
+              a = rngesus.num[14:8];
+              b = rngesus.num[6:0];
+              result = a - b;
             } 
-            else { // subtract block       
+            else { // subtract block
+              io_led[1] = b00001;       
               alu1.alufn = b000001;
               b = rngesus.num[15:8];
               a = rngesus.num[7:0];
+              result = a - b;
             }
             default:
               alu1.alufn = b000000;
               a = rngesus.num[6:0];
-              b = rngesus.num[13:7];   
+              b = rngesus.num[13:7];  
+              result = a + b; 
           }
+          
           alu1.a = a;
           alu1.b = b;
+          alu = alu1.alu;
           digitsa.value = a;
           digitsb.value = b;
           msega.values = digitsa.digits;
@@ -162,12 +204,37 @@ module mojo_top (
           a_seg = msega.seg;
           b_seg = msegb.seg;
           a_sel = ~msega.sel;
-          b_sel = ~msegb.sel;    
-          if (timingCounter.value == 20){
+          b_sel = ~msegb.sel;
+        
+          button0.button = ~buttons0;
+          io_led[2][0] = button0.count;
+          button1.button = ~buttons1;
+          io_led[2][1] = button1.count;
+          button2.button = ~buttons2;
+          io_led[2][2] = button2.count;
+          button3.button = ~buttons3;
+          io_led[2][3] = button3.count;
+          button4.button = ~buttons4;
+          io_led[2][4] = button4.count;
+          button5.button = ~buttons5;
+          io_led[2][5] = button5.count;
+          button6.button = ~buttons6;
+          io_led[2][6] = button6.count;
+          button7.button = ~buttons7;
+          io_led[2][7] = button7.count;
+          button7.button = ~buttons7;
+          io_led[2][7] = button7.count;
+          enterbutton.button = ~enterbuttons;
+        
+          sol = (button0.count) + (button1.count << 1) + (button2.count << 2) + (button3.count << 3) + (button4.count << 4) + (button5.count << 5) + (button6.count << 6) + (button7.count << 7);
+          
+          //io_led[1][0] = enterbutton.count;
+          if (io_button[0]){
+            if (sol == result){states.d = states.IDLE;}
+            else {io_led[2] = b11111111;}
+          }
+          else if (timingCounter.value == 20){
             states.d = states.SCORE;
-          }  
-          else if (io_button[0] == 1){
-            states.d = states.IDLE;
           }
           //if (p == alu && io_button[3] == 1) (if this is correct)
           //if (io_button[1] == 1){
@@ -177,37 +244,26 @@ module mojo_top (
           //else if (timingCounter.value == 20) {
               //states.d = states.SCORE;
           //}
+        
       states.IDLE:
-        if (io_button[1] == 1){ 
+        if (enterbutton.count){ 
           states.d = states.START;
+          rngesus.next = 1;
         }
       states.SCORE:
         if (hp.q == hp.ONE){
           states.d = states.OVER;
         }
         else{
-          if (hp.q == hp.EIGHT){
-           hp.d = hp.SEVEN;
-          }
-          else if (hp.q == hp.SEVEN){
-           hp.d = hp.SIX;
-          }
-          else if (hp.q == hp.SIX){
-           hp.d = hp.FIVE;
-          }
-          else if (hp.q == hp.FIVE){
-           hp.d = hp.FOUR;
-          }
-          else if (hp.q == hp.FOUR){
-           hp.d = hp.THREE;
-          }
-          else if (hp.q == hp.THREE){
-           hp.d = hp.TWO;
-          }
-          else if (hp.q == hp.TWO){
-           hp.d = hp.ONE;
-          }
-          states.d = states.START;
+          if (hp.q == hp.EIGHT){hp.d = hp.SEVEN;}
+          else if (hp.q == hp.SEVEN){hp.d = hp.SIX;}
+          else if (hp.q == hp.SIX){ hp.d = hp.FIVE;}
+          else if (hp.q == hp.FIVE){hp.d = hp.FOUR;}
+          else if (hp.q == hp.FOUR){hp.d = hp.THREE;}
+          else if (hp.q == hp.THREE){hp.d = hp.TWO;}
+          else if (hp.q == hp.TWO){hp.d = hp.ONE;}
+          states.d = states.IDLE;
+          //rngesus.next = 1;
         }
       states.OVER:
         io_led[0] = 8b11111111;
@@ -215,4 +271,4 @@ module mojo_top (
         io_led[2] = 8b11111111;
     }
   }  
-}     
+}
