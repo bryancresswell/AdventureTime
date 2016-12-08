@@ -1,7 +1,7 @@
 module mojo_top (
     input clk,              // 50MHz clock
     input rst_n,            // reset button (active low)
-    output led [8],         // 8 user controllable LEDs
+    //output led [8],         // 8 user controllable LEDs
     input cclk,             // configuration clock, AVR ready when high
     output spi_miso,        // AVR SPI MISO
     input spi_ss,           // AVR SPI Slave Select
@@ -29,7 +29,9 @@ module mojo_top (
     input buttons4,
     input buttons5,
     input buttons6,
-    input buttons7   
+    input buttons7,
+    
+    output op_seg [8]
   ) {
   sig rst;              // reset signal
   
@@ -61,7 +63,7 @@ module mojo_top (
   }
   
   sevenseg seg (.dot(0));
-  
+  operatorseg opseg;
   sig alu[8];  
   main alu1;  
   //sig p[8];
@@ -69,12 +71,13 @@ module mojo_top (
   sig b[8];
   sig sol[8];
   sig result[8];
+  sig op[2];
   
   always {
     reset_cond.in = ~rst_n; // input raw inverted reset signal
     rst = reset_cond.out;   // conditioned reset
     
-    led = 8h00;             // turn LEDs off
+    //led = 8h00;             // turn LEDs off
     spi_miso = bz;          // not using SPI
     spi_channel = bzzzz;    // not using flags
     avr_rx = bz;
@@ -142,6 +145,9 @@ module mojo_top (
     //inputer.button = buttons[7:0];
     //io_led[2] = inputer.value;
     
+    opseg.char = 8hff;
+    op_seg = opseg.segs;
+    
     case(states.q){
       states.BEGIN:
         if (enterbutton.count){
@@ -160,7 +166,8 @@ module mojo_top (
           hp.TWO: io_led[0] = 8b00000011;
           hp.ONE: io_led[0] = 8b00000001;
         }
-        case (rngesus.num[17:16]) { // multiply   
+        op = rngesus.num[17:16];
+        case (op) { // multiply   
           b01:
             io_led[1] = b000010;
             alu1.alufn = b000010;  // configures them to have these values now
@@ -205,6 +212,9 @@ module mojo_top (
           b_seg = msegb.seg;
           a_sel = ~msega.sel;
           b_sel = ~msegb.sel;
+          
+          opseg.char = op;
+          op_seg = opseg.segs;
         
           button0.button = ~buttons0;
           io_led[2][0] = button0.count;

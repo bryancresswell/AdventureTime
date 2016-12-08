@@ -5,6 +5,121 @@
 
 
 ####################################################################################
+# Constraints from file : 'user.ucf'
+####################################################################################
+
+# these ports are all used for displaying a and b
+# if need more ports, take from io_shield, but remember to remove those ports
+# from io_shield.ucf constraint file
+# the numbering of the a_seg reflect the position of the segments on the display
+NET "a_seg[0]" LOC = P99;
+NET "a_seg[0]" IOSTANDARD = LVTTL;
+NET "a_seg[1]" LOC = P100;
+NET "a_seg[1]" IOSTANDARD = LVTTL;
+NET "a_seg[2]" LOC = P101;
+NET "a_seg[2]" IOSTANDARD = LVTTL;
+NET "a_seg[3]" LOC = P102;
+NET "a_seg[3]" IOSTANDARD = LVTTL;
+NET "a_seg[4]" LOC = P104;
+NET "a_seg[4]" IOSTANDARD = LVTTL;
+NET "a_seg[5]" LOC = P105;
+NET "a_seg[5]" IOSTANDARD = LVTTL;
+NET "a_seg[6]" LOC = P111;
+NET "a_seg[6]" IOSTANDARD = LVTTL;
+NET "a_seg[7]" LOC = P112;
+NET "a_seg[7]" IOSTANDARD = LVTTL;
+
+# to select which number to be displayed
+# NOTE: THERE ARE 4 NUMBERS ON THE DISPLAY BUT WE ARE
+# USING ONLY 3 OF THEM SINCE THE MAX VALUE IS THREE DIGITS LONG
+NET "a_sel[0]" LOC = P27;
+NET "a_sel[0]" IOSTANDARD = LVTTL;
+NET "a_sel[1]" LOC = P29;
+NET "a_sel[1]" IOSTANDARD = LVTTL;
+NET "a_sel[2]" LOC = P30;
+NET "a_sel[2]" IOSTANDARD = LVTTL;
+
+# SAME GOES FOR THIS
+NET "b_seg[0]" LOC = P120;
+NET "b_seg[0]" IOSTANDARD = LVTTL;
+NET "b_seg[1]" LOC = P121;
+NET "b_seg[1]" IOSTANDARD = LVTTL;
+NET "b_seg[2]" LOC = P118;
+NET "b_seg[2]" IOSTANDARD = LVTTL;
+NET "b_seg[3]" LOC = P119;
+NET "b_seg[3]" IOSTANDARD = LVTTL;
+NET "b_seg[4]" LOC = P116;
+NET "b_seg[4]" IOSTANDARD = LVTTL;
+NET "b_seg[5]" LOC = P117;
+NET "b_seg[5]" IOSTANDARD = LVTTL;
+NET "b_seg[6]" LOC = P114;
+NET "b_seg[6]" IOSTANDARD = LVTTL;
+NET "b_seg[7]" LOC = P115;
+NET "b_seg[7]" IOSTANDARD = LVTTL;
+
+NET "b_sel[0]" LOC = P32;
+NET "b_sel[0]" IOSTANDARD = LVTTL;
+NET "b_sel[1]" LOC = P33;
+NET "b_sel[1]" IOSTANDARD = LVTTL;
+NET "b_sel[2]" LOC = P34;
+NET "b_sel[2]" IOSTANDARD = LVTTL;
+
+NET "buttons7" LOC = P57;
+NET "buttons7" IOSTANDARD = LVTTL;
+NET "buttons7" PULLUP;
+NET "buttons6" LOC = P58;
+NET "buttons6" IOSTANDARD = LVTTL;
+NET "buttons6" PULLUP;
+NET "buttons5" LOC = P66;
+NET "buttons5" IOSTANDARD = LVTTL;
+NET "buttons5" PULLUP;
+NET "buttons4" LOC = P67;
+NET "buttons4" IOSTANDARD = LVTTL;
+NET "buttons4" PULLUP;
+NET "buttons3" LOC = P74;
+NET "buttons3" IOSTANDARD = LVTTL;
+NET "buttons3" PULLUP;
+NET "buttons2" LOC = P75;
+NET "buttons2" IOSTANDARD = LVTTL;
+NET "buttons2" PULLUP;
+NET "buttons1" LOC = P78;
+NET "buttons1" IOSTANDARD = LVTTL;
+NET "buttons1" PULLUP;
+NET "buttons0" LOC = P79;
+NET "buttons0" IOSTANDARD = LVTTL;
+NET "buttons0" PULLUP;
+
+NET "enterbuttons" LOC = P50;
+NET "enterbuttons" IOSTANDARD = LVTTL;
+NET "enterbuttons" PULLUP;
+
+
+# < - 15
+NET "op_seg[0]" LOC = P134;
+NET "op_seg[0]" IOSTANDARD = LVTTL;
+# > - 5
+NET "op_seg[1]" LOC = P133;
+NET "op_seg[1]" IOSTANDARD = LVTTL;
+# ^ | 2
+NET "op_seg[2]" LOC = P132;
+NET "op_seg[2]" IOSTANDARD = LVTTL;
+# v | 6
+NET "op_seg[3]" LOC = P131;
+NET "op_seg[3]" IOSTANDARD = LVTTL;
+# < \ 3
+NET "op_seg[4]" LOC = P127;
+NET "op_seg[4]" IOSTANDARD = LVTTL;
+# < / 7
+NET "op_seg[5]" LOC = P126;
+NET "op_seg[5]" IOSTANDARD = LVTTL;
+# > \ 17
+NET "op_seg[6]" LOC = P124;
+NET "op_seg[6]" IOSTANDARD = LVTTL;
+# > / 14
+NET "op_seg[7]" LOC = P123;
+NET "op_seg[7]" IOSTANDARD = LVTTL;
+
+####################################################################################
 # Constraints from file : 'io_shield.ucf'
 ####################################################################################
 
@@ -102,84 +217,14 @@ NET "io_button[4]" LOC = P138;
 NET "io_button[4]" IOSTANDARD = LVTTL;
 NET "io_button[4]" PULLDOWN;
 
-NET "io_dip[23]" LOC = P57;
-NET "io_dip[23]" IOSTANDARD = LVTTL;
-NET "io_dip[23]" PULLDOWN;
-NET "io_dip[22]" LOC = P58;
-NET "io_dip[22]" IOSTANDARD = LVTTL;
-NET "io_dip[22]" PULLDOWN;
-NET "io_dip[21]" LOC = P66;
-NET "io_dip[21]" IOSTANDARD = LVTTL;
-NET "io_dip[21]" PULLDOWN;
-NET "io_dip[20]" LOC = P67;
-NET "io_dip[20]" IOSTANDARD = LVTTL;
-NET "io_dip[20]" PULLDOWN;
-NET "io_dip[19]" LOC = P74;
-NET "io_dip[19]" IOSTANDARD = LVTTL;
-NET "io_dip[19]" PULLDOWN;
-NET "io_dip[18]" LOC = P75;
-NET "io_dip[18]" IOSTANDARD = LVTTL;
-NET "io_dip[18]" PULLDOWN;
-NET "io_dip[17]" LOC = P78;
-NET "io_dip[17]" IOSTANDARD = LVTTL;
-NET "io_dip[17]" PULLDOWN;
-NET "io_dip[16]" LOC = P79;
-NET "io_dip[16]" IOSTANDARD = LVTTL;
-NET "io_dip[16]" PULLDOWN;
 
-NET "io_dip[15]" LOC = P99;
-NET "io_dip[15]" IOSTANDARD = LVTTL;
-NET "io_dip[15]" PULLDOWN;
-NET "io_dip[14]" LOC = P100;
-NET "io_dip[14]" IOSTANDARD = LVTTL;
-NET "io_dip[14]" PULLDOWN;
-NET "io_dip[13]" LOC = P101;
-NET "io_dip[13]" IOSTANDARD = LVTTL;
-NET "io_dip[13]" PULLDOWN;
-NET "io_dip[12]" LOC = P102;
-NET "io_dip[12]" IOSTANDARD = LVTTL;
-NET "io_dip[12]" PULLDOWN;
-NET "io_dip[11]" LOC = P104;
-NET "io_dip[11]" IOSTANDARD = LVTTL;
-NET "io_dip[11]" PULLDOWN;
-NET "io_dip[10]" LOC = P105;
-NET "io_dip[10]" IOSTANDARD = LVTTL;
-NET "io_dip[10]" PULLDOWN;
-NET "io_dip[9]" LOC = P111;
-NET "io_dip[9]" IOSTANDARD = LVTTL;
-NET "io_dip[9]" PULLDOWN;
-NET "io_dip[8]" LOC = P112;
-NET "io_dip[8]" IOSTANDARD = LVTTL;
-NET "io_dip[8]" PULLDOWN;
 
-NET "io_dip[7]" LOC = P115;
-NET "io_dip[7]" IOSTANDARD = LVTTL;
-NET "io_dip[7]" PULLDOWN;
-NET "io_dip[6]" LOC = P114;
-NET "io_dip[6]" IOSTANDARD = LVTTL;
-NET "io_dip[6]" PULLDOWN;
-NET "io_dip[5]" LOC = P117;
-NET "io_dip[5]" IOSTANDARD = LVTTL;
-NET "io_dip[5]" PULLDOWN;
-NET "io_dip[4]" LOC = P116;
-NET "io_dip[4]" IOSTANDARD = LVTTL;
-NET "io_dip[4]" PULLDOWN;
-NET "io_dip[3]" LOC = P119;
-NET "io_dip[3]" IOSTANDARD = LVTTL;
-NET "io_dip[3]" PULLDOWN;
-NET "io_dip[2]" LOC = P118;
-NET "io_dip[2]" IOSTANDARD = LVTTL;
-NET "io_dip[2]" PULLDOWN;
-NET "io_dip[1]" LOC = P121;
-NET "io_dip[1]" IOSTANDARD = LVTTL;
-NET "io_dip[1]" PULLDOWN;
-NET "io_dip[0]" LOC = P120;
-NET "io_dip[0]" IOSTANDARD = LVTTL;
-NET "io_dip[0]" PULLDOWN;
 
 ####################################################################################
 # Constraints from file : 'mojo.ucf'
 ####################################################################################
+
+CONFIG VCCAUX  = 3.3;
 
 NET "clk" TNM_NET = "clk";
 TIMESPEC TS_clk = PERIOD "clk" 50 MHz HIGH 50 %;
@@ -192,22 +237,6 @@ NET "rst_n" IOSTANDARD = LVTTL;
 NET "cclk" LOC = P70;
 NET "cclk" IOSTANDARD = LVTTL;
 
-NET "led[0]" LOC = P134;
-NET "led[0]" IOSTANDARD = LVTTL;
-NET "led[1]" LOC = P133;
-NET "led[1]" IOSTANDARD = LVTTL;
-NET "led[2]" LOC = P132;
-NET "led[2]" IOSTANDARD = LVTTL;
-NET "led[3]" LOC = P131;
-NET "led[3]" IOSTANDARD = LVTTL;
-NET "led[4]" LOC = P127;
-NET "led[4]" IOSTANDARD = LVTTL;
-NET "led[5]" LOC = P126;
-NET "led[5]" IOSTANDARD = LVTTL;
-NET "led[6]" LOC = P124;
-NET "led[6]" IOSTANDARD = LVTTL;
-NET "led[7]" LOC = P123;
-NET "led[7]" IOSTANDARD = LVTTL;
 
 NET "spi_mosi" LOC = P44;
 NET "spi_mosi" IOSTANDARD = LVTTL;
