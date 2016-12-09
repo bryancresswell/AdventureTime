@@ -32,6 +32,20 @@ NET "b_sel<0>" LOC = P32 | IOSTANDARD = LVTTL;
 NET "b_sel<1>" LOC = P33 | IOSTANDARD = LVTTL;
 NET "b_sel<2>" LOC = P34 | IOSTANDARD = LVTTL;
 
+# SAME GOES FOR THIS
+#NET "timer_seg<0>" LOC = P5 | IOSTANDARD = LVTTL;
+#NET "timer_seg<1>" LOC = P8 | IOSTANDARD = LVTTL;
+#NET "timer_seg<2>" LOC = P144 | IOSTANDARD = LVTTL;
+#NET "timer_seg<3>" LOC = P143 | IOSTANDARD = LVTTL;
+#NET "timer_seg<4>" LOC = P2 | IOSTANDARD = LVTTL;
+#NET "timer_seg<5>" LOC = P6 | IOSTANDARD = LVTTL;
+#NET "timer_seg<6>" LOC = P1 | IOSTANDARD = LVTTL;
+#NET "timer_seg<7>" LOC = P141 | IOSTANDARD = LVTTL;
+
+#NET "timer_sel<0>" LOC = P9 | IOSTANDARD = LVTTL;
+#NET "timer_sel<1>" LOC = P10 | IOSTANDARD = LVTTL;
+#NET "timer_sel<2>" LOC = P7 | IOSTANDARD = LVTTL;
+
 NET "buttons7" LOC = P57 | IOSTANDARD = LVTTL | PULLUP;
 NET "buttons6" LOC = P58 | IOSTANDARD = LVTTL | PULLUP;
 NET "buttons5" LOC = P66 | IOSTANDARD = LVTTL | PULLUP;
