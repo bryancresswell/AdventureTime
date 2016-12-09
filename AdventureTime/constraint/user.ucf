@@ -2,21 +2,21 @@
 # if need more ports, take from io_shield, but remember to remove those ports
 # from io_shield.ucf constraint file
 # the numbering of the a_seg reflect the position of the segments on the display
-NET "a_seg<0>" LOC = P99 | IOSTANDARD = LVTTL;
-NET "a_seg<1>" LOC = P100 | IOSTANDARD = LVTTL;
-NET "a_seg<2>" LOC = P101 | IOSTANDARD = LVTTL;
-NET "a_seg<3>" LOC = P102 | IOSTANDARD = LVTTL;
-NET "a_seg<4>" LOC = P104 | IOSTANDARD = LVTTL;
-NET "a_seg<5>" LOC = P105 | IOSTANDARD = LVTTL;
-NET "a_seg<6>" LOC = P111 | IOSTANDARD = LVTTL;
+NET "a_seg<0>" LOC = P99 | IOSTANDARD = LVTTL; # 11
+NET "a_seg<1>" LOC = P100 | IOSTANDARD = LVTTL; # 7
+NET "a_seg<2>" LOC = P101 | IOSTANDARD = LVTTL; # 4
+NET "a_seg<3>" LOC = P102 | IOSTANDARD = LVTTL; # 2 
+NET "a_seg<4>" LOC = P104 | IOSTANDARD = LVTTL; # 1
+NET "a_seg<5>" LOC = P105 | IOSTANDARD = LVTTL; # 10
+NET "a_seg<6>" LOC = P111 | IOSTANDARD = LVTTL; # 5
 NET "a_seg<7>" LOC = P112 | IOSTANDARD = LVTTL;
 
 # to select which number to be displayed
 # NOTE: THERE ARE 4 NUMBERS ON THE DISPLAY BUT WE ARE
 # USING ONLY 3 OF THEM SINCE THE MAX VALUE IS THREE DIGITS LONG
-NET "a_sel<0>" LOC = P27 | IOSTANDARD = LVTTL;
-NET "a_sel<1>" LOC = P29 | IOSTANDARD = LVTTL;
-NET "a_sel<2>" LOC = P30 | IOSTANDARD = LVTTL;
+NET "a_sel<0>" LOC = P27 | IOSTANDARD = LVTTL; # 6
+NET "a_sel<1>" LOC = P29 | IOSTANDARD = LVTTL; # 8
+NET "a_sel<2>" LOC = P30 | IOSTANDARD = LVTTL; # 9
 
 # SAME GOES FOR THIS
 NET "b_seg<0>" LOC = P120 | IOSTANDARD = LVTTL;
