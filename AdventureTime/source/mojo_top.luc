@@ -1,7 +1,7 @@
 module mojo_top (
     input clk,              // 50MHz clock
     input rst_n,            // reset button (active low)
-    output led [8],         // 8 user controllable LEDs
+    //output led [8],         // 8 user controllable LEDs
     input cclk,             // configuration clock, AVR ready when high
     output spi_miso,        // AVR SPI MISO
     input spi_ss,           // AVR SPI Slave Select
@@ -20,8 +20,9 @@ module mojo_top (
     output a_sel [4],
     output b_seg [8],
     output b_sel [4],
-    
+    output op_seg [8],
     input enterbuttons,
+    input resetbuttons,
     input buttons0,
     input buttons1,
     input buttons2,
@@ -41,13 +42,15 @@ module mojo_top (
     bin_to_dec digitsb (#DIGITS(4));
          
     .rst(rst) {
-      fsm states = {BEGIN, START, IDLE, SCORE, OVER};  
-      fsm hp = {EIGHT, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN};  
+      fsm states = {BEGIN, START, IDLE, LEVEL, SCORE, OVER};  
+      fsm hp = {EIGHT, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN};
+      fsm level = {ONE, TWO, THREE, FOUR, FIVE, SIX};
       pn_gen rngesus;
       multi_seven_seg msega;
       multi_seven_seg msegb;
       
       buttonCounter enterbutton;
+      buttonCounter resetbutton;
       buttonCounter button0;
       buttonCounter button1;
       buttonCounter button2;
@@ -57,11 +60,15 @@ module mojo_top (
       buttonCounter button6;
       buttonCounter button7;
     }    
-    counter timingCounter (#SIZE(5), #TOP(20), #DIV(26));
+    counter timingCounter1 (#SIZE(5), #TOP(40), #DIV(26));
+    counter timingCounter2 (#SIZE(5), #TOP(30), #DIV(26));
+    counter timingCounter3 (#SIZE(5), #TOP(20), #DIV(26));
+    counter timingCounter4 (#SIZE(5), #TOP(15), #DIV(26));
   }
   
   sevenseg seg (.dot(0));
-  
+  operatorseg opseg;
+  sig op[2];
   sig alu[8];  
   main alu1;  
   //sig p[8];
@@ -74,7 +81,7 @@ module mojo_top (
     reset_cond.in = ~rst_n; // input raw inverted reset signal
     rst = reset_cond.out;   // conditioned reset
     
-    led = 8h00;             // turn LEDs off
+    //led = 8h00;             // turn LEDs off
     spi_miso = bz;          // not using SPI
     spi_channel = bzzzz;    // not using flags
     avr_rx = bz;
@@ -84,7 +91,11 @@ module mojo_top (
     io_seg = 8hff;          // turn segments off
     io_sel = 4hf;              // select no digits
     
-    timingCounter.rst = 1;        
+    timingCounter1.rst = 1; 
+    timingCounter2.rst = 1; 
+    timingCounter3.rst = 1; 
+    timingCounter4.rst = 1;  
+          
     seg.char = 0;
     
     io_seg = ~seg.segs;
@@ -106,7 +117,10 @@ module mojo_top (
     alu1.b = 0;
     alu = alu1.alu;
     
-    timingCounter.rst = 1;
+    timingCounter1.rst = 1;
+    timingCounter2.rst = 1;
+    timingCounter3.rst = 1;
+    timingCounter4.rst = 1;
     
     seg.char = 0;
     io_seg = ~seg.segs;
@@ -127,6 +141,9 @@ module mojo_top (
     b_seg = msegb.seg;
     b_sel = ~msegb.sel;
     
+    opseg.char = 0;
+    op_seg = opseg.segs;
+    
     button0.button = ~buttons0;
     button1.button = ~buttons1;
     button2.button = ~buttons2;
@@ -137,19 +154,23 @@ module mojo_top (
     button7.button = ~buttons7;
     button7.button = ~buttons7;
     enterbutton.button = ~enterbuttons;
-    //io_led[1][0] = enterbutton.count;
-    
-    //inputer.button = buttons[7:0];
-    //io_led[2] = inputer.value;
-    
+    resetbutton.button = ~resetbuttons;
+   
     case(states.q){
       states.BEGIN:
         if (enterbutton.count){
           states.d = states.START;
         }
       states.START:
-        timingCounter.rst = 0;
-        seg.char = 20 - timingCounter.value;
+        //case(level.q){
+          //level.ONE: timingCounter1.rst = 0; seg.char = 40 - timingCounter1.value;
+          //level.TWO: timingCounter2.rst = 0; seg.char = 30 - timingCounter2.value;
+          //level.THREE: timingCounter2.rst = 0; seg.char = 30 - timingCounter2.value;
+          //level.FOUR: timingCounter3.rst = 0; seg.char = 20 - timingCounter3.value;
+          //level.FIVE: timingCounter4.rst = 0; seg.char = 20 - timingCounter4.value;
+        //}
+        //timingCounter1.rst = 0;
+        //seg.char = 20 - timingCounter.value;
         case (hp.q){
           hp.EIGHT: io_led[0] = 8b11111111;
           hp.SEVEN: io_led[0] = 8b01111111; 
@@ -160,15 +181,24 @@ module mojo_top (
           hp.TWO: io_led[0] = 8b00000011;
           hp.ONE: io_led[0] = 8b00000001;
         }
-        case (rngesus.num[17:16]) { // multiply   
+        
+        case (level.q){
+          level.ONE: io_led[1] = 8b00000001;
+          level.TWO: io_led[1] = 8b00000011;
+          level.THREE: io_led[1] = 8b00000111;
+          level.FOUR: io_led[1] = 8b00001111;
+          level.FIVE: io_led[1] = 8b00011111;
+        }
+        op = rngesus.num[17:16];
+        case (op) { // multiply   
           b01:
-            io_led[1] = b000010;
+            //io_led[1] = b000010;
             alu1.alufn = b000010;  // configures them to have these values now
             a = rngesus.num[3:0];
             b = rngesus.num[7:4];
             result = a * b;
           b00: // add block
-            io_led[1] = b0000000;      
+            //io_led[1] = b0000000;      
             alu1.alufn = b000000;
             a = rngesus.num[6:0];
             b = rngesus.num[14:8];
@@ -178,20 +208,20 @@ module mojo_top (
               alu1.alufn = b000001;
               a = rngesus.num[14:8];
               b = rngesus.num[6:0];
-              result = a - b;
-            } 
+              result = a - b; 
+            }
             else { // subtract block
-              io_led[1] = b00001;       
+              //io_led[1] = b00001;       
               alu1.alufn = b000001;
               b = rngesus.num[15:8];
               a = rngesus.num[7:0];
               result = a - b;
             }
-            default:
-              alu1.alufn = b000000;
-              a = rngesus.num[6:0];
-              b = rngesus.num[13:7];  
-              result = a + b; 
+           default:
+             alu1.alufn = b000000;
+             a = rngesus.num[6:0];
+             b = rngesus.num[13:7];  
+             result = a + b; 
           }
           
           alu1.a = a;
@@ -206,6 +236,9 @@ module mojo_top (
           a_sel = ~msega.sel;
           b_sel = ~msegb.sel;
         
+          opseg.char = op;
+          op_seg = opseg.segs;
+          
           button0.button = ~buttons0;
           io_led[2][0] = button0.count;
           button1.button = ~buttons1;
@@ -228,47 +261,50 @@ module mojo_top (
         
           sol = (button0.count) + (button1.count << 1) + (button2.count << 2) + (button3.count << 3) + (button4.count << 4) + (button5.count << 5) + (button6.count << 6) + (button7.count << 7);
           
-          //io_led[1][0] = enterbutton.count;
-          if (io_button[0]){
-            if (sol == result){states.d = states.IDLE;}
-            else {io_led[2] = b11111111;}
+          if (sol == alu){states.d = states.LEVEL;}
+          else if (resetbutton.count) {states.d = states.START;}
+          else{
+            case(level.q){
+            level.ONE: timingCounter1.rst = 0; seg.char = 40 - timingCounter1.value; if(timingCounter1.value == 40) states.d = states.SCORE;
+            level.TWO: timingCounter2.rst = 0; seg.char = 30 - timingCounter2.value; if (timingCounter2.value == 30) states.d = states.SCORE;
+            level.THREE: timingCounter2.rst = 0; seg.char = 30 - timingCounter2.value; if (timingCounter2.value == 30) states.d = states.SCORE;
+            level.FOUR: timingCounter3.rst = 0; seg.char = 20 - timingCounter3.value; if (timingCounter3.value == 20) states.d = states.SCORE;
+            level.FIVE: timingCounter4.rst = 0; seg.char = 20 - timingCounter4.value; if (timingCounter4.value == 15) states.d = states.SCORE;
+            level.SIX: states.d = states.OVER;
+            }
           }
-          else if (timingCounter.value == 20){
-            states.d = states.SCORE;
-          }
-          //if (p == alu && io_button[3] == 1) (if this is correct)
-          //if (io_button[1] == 1){
-            //states.d = states.IDLE;
-          //}
-          //p != alu && io_button[3] == 1 || (remember to add the alu check and button)
-          //else if (timingCounter.value == 20) {
-              //states.d = states.SCORE;
-          //}
         
       states.IDLE:
         if (enterbutton.count){ 
           states.d = states.START;
           rngesus.next = 1;
         }
+        
+      states.LEVEL:
+        if (level.q == level.ONE){states.d = states.IDLE; level.d = level.TWO;}
+        else if (level.q == level.SIX) {states.d = states.OVER;}
+        else if (level.q == level.FIVE){level.d = level.SIX;}
+        else if (level.q == level.FOUR){level.d = level.FIVE;states.d = states.IDLE;}
+        else if (level.q == level.THREE){level.d = level.FOUR;states.d = states.IDLE;}
+        else if (level.q == level.TWO){level.d = level.THREE;states.d = states.IDLE;}
+        //states.d = states.IDLE;  
+        
       states.SCORE:
-        if (hp.q == hp.ONE){
-          states.d = states.OVER;
-        }
-        else{
-          if (hp.q == hp.EIGHT){hp.d = hp.SEVEN;}
-          else if (hp.q == hp.SEVEN){hp.d = hp.SIX;}
-          else if (hp.q == hp.SIX){ hp.d = hp.FIVE;}
-          else if (hp.q == hp.FIVE){hp.d = hp.FOUR;}
-          else if (hp.q == hp.FOUR){hp.d = hp.THREE;}
-          else if (hp.q == hp.THREE){hp.d = hp.TWO;}
-          else if (hp.q == hp.TWO){hp.d = hp.ONE;}
-          states.d = states.IDLE;
-          //rngesus.next = 1;
-        }
+        if (hp.q == hp.ONE){states.d = states.OVER;}
+        else if (hp.q == hp.EIGHT){hp.d = hp.SEVEN;states.d = states.IDLE;}
+        else if (hp.q == hp.SEVEN){hp.d = hp.SIX;states.d = states.IDLE;}
+        else if (hp.q == hp.SIX){ hp.d = hp.FIVE;states.d = states.IDLE;}
+        else if (hp.q == hp.FIVE){hp.d = hp.FOUR;states.d = states.IDLE;}
+        else if (hp.q == hp.FOUR){hp.d = hp.THREE;states.d = states.IDLE;}
+        else if (hp.q == hp.THREE){hp.d = hp.TWO;states.d = states.IDLE;}
+        else if (hp.q == hp.TWO){hp.d = hp.ONE;states.d = states.IDLE;}
+        //states.d = states.IDLE;
+    
       states.OVER:
         io_led[0] = 8b11111111;
         io_led[1] = 8b11111111;
         io_led[2] = 8b11111111;
+        if (resetbutton.count) {states.d = states.START;}
     }
   }  
-}
+}  
