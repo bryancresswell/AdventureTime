@@ -1,0 +1,14 @@
+module operatorseg (
+    input char[4],
+    output segs[8]
+  ) {
+
+  always {
+    case (char) {
+      0: segs = 8b00001111;
+      1: segs = 8b00000011;
+      2: segs = 8b11110000;
+      default: segs = 8b00000000;
+    }
+  }
+}
