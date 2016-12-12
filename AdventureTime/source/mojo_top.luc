@@ -12,8 +12,8 @@ module mojo_top (
     output avr_rx,          // AVR RX (FPGA TX)
     input avr_rx_busy,      // AVR RX buffer full
     output io_led [3][8],   // LEDs on IO Shield
-    output io_seg [8],      // 7-segment LEDs on IO Shield
-    output io_sel [4],      // Digit select on IO Shield
+    //output io_seg [8],      // 7-segment LEDs on IO Shield
+    //output io_sel [4],      // Digit select on IO Shield
     input io_button [5],    // 5 buttons on IO Shield
     //input io_dip [3][8]     // DIP switches on IO Shield
     output a_seg [8],
@@ -21,8 +21,8 @@ module mojo_top (
     output b_seg [8],
     output b_sel [4],
     output op_seg [8],
-    //output timer_seg [8],
-    //output timer_sel [8],
+    output timer_seg [8],
+    output timer_sel [8],
     input enterbuttons,
     input resetbuttons,
     input buttons0,
@@ -48,10 +48,11 @@ module mojo_top (
       fsm states = {BEGIN, START, IDLE, LEVEL, SCORE, OVER};  
       fsm hp = {EIGHT, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN};
       fsm level = {ONE, TWO, THREE, FOUR, FIVE, SIX};
+      fsm flashy = {ONE, TWO, THREE, FOUR};
       pn_gen rngesus;
       multi_seven_seg msega;
       multi_seven_seg msegb;
-      //multi_seven_seg msegt;
+      multi_seven_seg msegt;
       buttonCounter resetbutton;
       buttonCounter button0;
       buttonCounter button1;
@@ -69,7 +70,7 @@ module mojo_top (
     counter timingCounter4 (#SIZE(5), #TOP(15), #DIV(26));
   }
   
-  sevenseg seg (.dot(0));
+  //sevenseg seg (.dot(0));
   operatorseg opseg;
   sig op[2];
   sig alu[8];  
@@ -91,18 +92,18 @@ module mojo_top (
     rngesus.seed = 0;
     rngesus.next = 0;
     io_led = 3x{{8h00}};    // turn LEDs off
-    io_seg = 8hff;          // turn segments off
-    io_sel = 4hf;              // select no digits
+    //io_seg = 8hff;          // turn segments off
+    //io_sel = 4hf;              // select no digits
     
     timingCounter1.rst = 1; 
     timingCounter2.rst = 1; 
     timingCounter3.rst = 1; 
     timingCounter4.rst = 1;  
           
-    seg.char = 0;
+    //seg.char = 0;
     
-    io_seg = ~seg.segs;
-    io_sel = ~4h1;
+    //io_seg = ~seg.segs;
+    //io_sel = ~4h1;
       
     alu1.a = 0;
     alu1.b = 0;
@@ -125,9 +126,9 @@ module mojo_top (
     timingCounter3.rst = 1;
     timingCounter4.rst = 1;
     
-    seg.char = 0;
-    io_seg = ~seg.segs;
-    io_sel = ~4h1;
+    //seg.char = 0;
+    //io_seg = ~seg.segs;
+    //io_sel = ~4h1;
     //// main code block for display from here to...
     //// input the a values into digitsa
     digitsa.value = 0; // collect a's values
@@ -145,9 +146,9 @@ module mojo_top (
     b_sel = ~msegb.sel;
     
     digitst.value = 0;
-    //msegt.values = digitst.digits;
-    //timer_seg = msegt.seg;
-    //timer_sel = ~msegt.sel;
+    msegt.values = digitst.digits;
+    timer_seg = msegt.seg;
+    timer_sel = ~msegt.sel;
     
     opseg.char = 0;
     op_seg = opseg.segs;
@@ -166,23 +167,27 @@ module mojo_top (
     resetbutton.button = ~resetbuttons;
    
     case(states.q){
-      states.BEGIN:
+      states.BEGIN:   
+        case (flashy.q){
+          flashy.ONE: io_led[0] = 8b01010101; io_led[1] = 8b10001000; io_led[2] = 8b10101010;
+          flashy.TWO: io_led[0] = 8b10101010; io_led[1] = 8b01000100; io_led[2] = 8b01010101;
+          flashy.THREE: io_led[0] = 8b01010101; io_led[1] = 8b00100010; io_led[2] = 8b10101010;
+          flashy.FOUR: io_led[0] = 8b10101010; io_led[1] = 8b00010001; io_led[2] = 8b01010101;
+        }
+        
+        if (flashy.q == flashy.ONE){flashy.d = flashy.TWO;}
+        else if (flashy.q == flashy.TWO){flashy.d = flashy.THREE;}
+        else if (flashy.q == flashy.THREE){flashy.d = flashy.FOUR;}
+        else if (flashy.q == flashy.FOUR){ flashy.d = flashy.ONE;}
+        
         if (enterbutton.count){
           states.d = states.START;
           rngesus.seed = rngesus.num[31:0];
           rngesus.next = 1;
           enterbutton.rst = 1;
         }
+        
       states.START:
-        //case(level.q){
-          //level.ONE: timingCounter1.rst = 0; seg.char = 40 - timingCounter1.value;
-          //level.TWO: timingCounter2.rst = 0; seg.char = 30 - timingCounter2.value;
-          //level.THREE: timingCounter2.rst = 0; seg.char = 30 - timingCounter2.value;
-          //level.FOUR: timingCounter3.rst = 0; seg.char = 20 - timingCounter3.value;
-          //level.FIVE: timingCounter4.rst = 0; seg.char = 20 - timingCounter4.value;
-        //}
-        //timingCounter1.rst = 0;
-        //seg.char = 20 - timingCounter.value;
         case (hp.q){
           hp.EIGHT: io_led[0] = 8b11111111;
           hp.SEVEN: io_led[0] = 8b01111111; 
@@ -204,13 +209,11 @@ module mojo_top (
         op = rngesus.num[17:16];
         case (op) { // multiply   
           b01:
-            //io_led[1] = b000010;
             alu1.alufn = b000010;  // configures them to have these values now
             a = rngesus.num[3:0];
             b = rngesus.num[7:4];
             result = a * b;
-          b00: // add block
-            //io_led[1] = b0000000;      
+          b00: // add block     
             alu1.alufn = b000000;
             a = rngesus.num[6:0];
             b = rngesus.num[14:8];
@@ -222,8 +225,7 @@ module mojo_top (
               b = rngesus.num[6:0];
               result = a - b; 
             }
-            else { // subtract block
-              //io_led[1] = b00001;       
+            else { // subtract block       
               alu1.alufn = b000001;
               b = rngesus.num[15:8];
               a = rngesus.num[7:0];
@@ -239,13 +241,13 @@ module mojo_top (
           alu1.a = a;
           alu1.b = b;
           alu = alu1.alu;
-          //digitsa.value = a;
+          digitsa.value = a;
           digitsb.value = b;
-          //msega.values = digitsa.digits;
+          msega.values = digitsa.digits;
           msegb.values = digitsb.digits;
-          //a_seg = msega.seg;
+          a_seg = msega.seg;
           b_seg = msegb.seg;
-          //a_sel = ~msega.sel;
+          a_sel = ~msega.sel;
           b_sel = ~msegb.sel;
         
           opseg.char = op;
@@ -274,18 +276,15 @@ module mojo_top (
         
           sol = (button0.count) + (button1.count << 1) + (button2.count << 2) + (button3.count << 3) + (button4.count << 4) + (button5.count << 5) + (button6.count << 6) + (button7.count << 7);
           
-          //if (sol == alu){states.d = states.LEVEL;}
-          //else if (resetbutton.count) {states.d = states.START;}
-          //else{
-            case(level.q){
-            level.ONE: timingCounter1.rst = 0; digitsa.value = 40 - timingCounter1.value; msega.values = digitsa.digits; a_seg = msega.seg; a_sel = ~msega.sel; if(timingCounter1.value == 40) states.d = states.SCORE;
-            level.TWO: timingCounter2.rst = 0; digitsa.value = 30 - timingCounter2.value; msega.values = digitst.digits; a_seg = msega.seg; a_sel = ~msega.sel; if (timingCounter2.value == 30) states.d = states.SCORE;
-            level.THREE: timingCounter2.rst = 0; digitsa.value = 30 - timingCounter2.value; msega.values = digitst.digits; a_seg = msega.seg; a_sel = ~msega.sel; if (timingCounter2.value == 30) states.d = states.SCORE;
-            level.FOUR: timingCounter3.rst = 0; digitsa.value = 20 - timingCounter3.value; msega.values = digitst.digits; a_seg = msega.seg; a_sel = ~msega.sel; if (timingCounter3.value == 20) states.d = states.SCORE;
-            level.FIVE: timingCounter4.rst = 0; digitsa.value = 15 - timingCounter4.value; msega.values = digitst.digits; a_seg = msega.seg; a_sel = ~msega.sel; if (timingCounter4.value == 15) states.d = states.SCORE;
+          if (sol == alu){states.d = states.LEVEL;}
+          case(level.q){
+            level.ONE: timingCounter1.rst = 0; digitst.value = 40 - timingCounter1.value; msegt.values = digitst.digits; timer_seg = msegt.seg; timer_sel = ~msegt.sel; if(timingCounter1.value == 40) states.d = states.SCORE;
+            level.TWO: timingCounter2.rst = 0; digitst.value = 30 - timingCounter2.value; msegt.values = digitst.digits; timer_seg = msegt.seg; timer_sel = ~msegt.sel; if (timingCounter2.value == 30) states.d = states.SCORE;
+            level.THREE: timingCounter2.rst = 0; digitst.value = 30 - timingCounter2.value; msegt.values = digitst.digits; timer_seg = msegt.seg; timer_sel = ~msegt.sel; if (timingCounter2.value == 30) states.d = states.SCORE;
+            level.FOUR: timingCounter3.rst = 0; digitst.value = 20 - timingCounter3.value; msegt.values = digitst.digits; timer_seg = msegt.seg; timer_sel = ~msegt.sel; if (timingCounter3.value == 20) states.d = states.SCORE;
+            level.FIVE: timingCounter4.rst = 0; digitst.value = 15 - timingCounter4.value; msegt.values = digitst.digits; timer_seg = msegt.seg; timer_sel = ~msegt.sel; if (timingCounter4.value == 15) states.d = states.SCORE;
             level.SIX: states.d = states.OVER;
-            }
-          //}
+          }
         
       states.IDLE:
         if (enterbutton.count){ // is the enter button state being skipped because the value of enterbutton.count is > 1

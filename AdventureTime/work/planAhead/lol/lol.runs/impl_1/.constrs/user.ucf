@@ -1,0 +1,147 @@
+# these ports are all used for displaying a and b
+# if need more ports, take from io_shield, but remember to remove those ports
+# from io_shield.ucf constraint file
+# the numbering of the a_seg reflect the position of the segments on the display
+# 11
+NET "a_seg[0]" LOC = P99;
+NET "a_seg[0]" IOSTANDARD = LVTTL;
+# 7
+NET "a_seg[1]" LOC = P100;
+NET "a_seg[1]" IOSTANDARD = LVTTL;
+# 4
+NET "a_seg[2]" LOC = P101;
+NET "a_seg[2]" IOSTANDARD = LVTTL;
+# 2 
+NET "a_seg[3]" LOC = P102;
+NET "a_seg[3]" IOSTANDARD = LVTTL;
+# 1
+NET "a_seg[4]" LOC = P104;
+NET "a_seg[4]" IOSTANDARD = LVTTL;
+# 10
+NET "a_seg[5]" LOC = P105;
+NET "a_seg[5]" IOSTANDARD = LVTTL;
+# 5
+NET "a_seg[6]" LOC = P111;
+NET "a_seg[6]" IOSTANDARD = LVTTL;
+NET "a_seg[7]" LOC = P112;
+NET "a_seg[7]" IOSTANDARD = LVTTL;
+
+# to select which number to be displayed
+# NOTE: THERE ARE 4 NUMBERS ON THE DISPLAY BUT WE ARE
+# USING ONLY 3 OF THEM SINCE THE MAX VALUE IS THREE DIGITS LONG
+# 6
+NET "a_sel[0]" LOC = P27;
+NET "a_sel[0]" IOSTANDARD = LVTTL;
+# 8
+NET "a_sel[1]" LOC = P29;
+NET "a_sel[1]" IOSTANDARD = LVTTL;
+# 9
+NET "a_sel[2]" LOC = P30;
+NET "a_sel[2]" IOSTANDARD = LVTTL;
+
+# SAME GOES FOR THIS
+NET "b_seg[0]" LOC = P120;
+NET "b_seg[0]" IOSTANDARD = LVTTL;
+NET "b_seg[1]" LOC = P121;
+NET "b_seg[1]" IOSTANDARD = LVTTL;
+NET "b_seg[2]" LOC = P118;
+NET "b_seg[2]" IOSTANDARD = LVTTL;
+NET "b_seg[3]" LOC = P119;
+NET "b_seg[3]" IOSTANDARD = LVTTL;
+NET "b_seg[4]" LOC = P116;
+NET "b_seg[4]" IOSTANDARD = LVTTL;
+NET "b_seg[5]" LOC = P117;
+NET "b_seg[5]" IOSTANDARD = LVTTL;
+NET "b_seg[6]" LOC = P114;
+NET "b_seg[6]" IOSTANDARD = LVTTL;
+NET "b_seg[7]" LOC = P115;
+NET "b_seg[7]" IOSTANDARD = LVTTL;
+
+NET "b_sel[0]" LOC = P32;
+NET "b_sel[0]" IOSTANDARD = LVTTL;
+NET "b_sel[1]" LOC = P33;
+NET "b_sel[1]" IOSTANDARD = LVTTL;
+NET "b_sel[2]" LOC = P34;
+NET "b_sel[2]" IOSTANDARD = LVTTL;
+
+# SAME GOES FOR THIS
+NET "timer_seg[0]" LOC = P5;
+NET "timer_seg[0]" IOSTANDARD = LVTTL;
+NET "timer_seg[1]" LOC = P8;
+NET "timer_seg[1]" IOSTANDARD = LVTTL;
+NET "timer_seg[2]" LOC = P144;
+NET "timer_seg[2]" IOSTANDARD = LVTTL;
+NET "timer_seg[3]" LOC = P143;
+NET "timer_seg[3]" IOSTANDARD = LVTTL;
+NET "timer_seg[4]" LOC = P2;
+NET "timer_seg[4]" IOSTANDARD = LVTTL;
+NET "timer_seg[5]" LOC = P6;
+NET "timer_seg[5]" IOSTANDARD = LVTTL;
+NET "timer_seg[6]" LOC = P1;
+NET "timer_seg[6]" IOSTANDARD = LVTTL;
+NET "timer_seg[7]" LOC = P141;
+NET "timer_seg[7]" IOSTANDARD = LVTTL;
+
+NET "timer_sel[0]" LOC = P9;
+NET "timer_sel[0]" IOSTANDARD = LVTTL;
+NET "timer_sel[1]" LOC = P10;
+NET "timer_sel[1]" IOSTANDARD = LVTTL;
+NET "timer_sel[2]" LOC = P7;
+NET "timer_sel[2]" IOSTANDARD = LVTTL;
+
+NET "buttons7" LOC = P57;
+NET "buttons7" IOSTANDARD = LVTTL;
+NET "buttons7" PULLUP;
+NET "buttons6" LOC = P58;
+NET "buttons6" IOSTANDARD = LVTTL;
+NET "buttons6" PULLUP;
+NET "buttons5" LOC = P66;
+NET "buttons5" IOSTANDARD = LVTTL;
+NET "buttons5" PULLUP;
+NET "buttons4" LOC = P67;
+NET "buttons4" IOSTANDARD = LVTTL;
+NET "buttons4" PULLUP;
+NET "buttons3" LOC = P74;
+NET "buttons3" IOSTANDARD = LVTTL;
+NET "buttons3" PULLUP;
+NET "buttons2" LOC = P75;
+NET "buttons2" IOSTANDARD = LVTTL;
+NET "buttons2" PULLUP;
+NET "buttons1" LOC = P78;
+NET "buttons1" IOSTANDARD = LVTTL;
+NET "buttons1" PULLUP;
+NET "buttons0" LOC = P79;
+NET "buttons0" IOSTANDARD = LVTTL;
+NET "buttons0" PULLUP;
+
+NET "enterbuttons" LOC = P51;
+NET "enterbuttons" IOSTANDARD = LVTTL;
+NET "enterbuttons" PULLUP;
+NET "resetbuttons" LOC = P41;
+NET "resetbuttons" IOSTANDARD = LVTTL;
+NET "resetbuttons" PULLUP;
+
+# < - 15
+NET "op_seg[0]" LOC = P134;
+NET "op_seg[0]" IOSTANDARD = LVTTL;
+# > - 5
+NET "op_seg[1]" LOC = P133;
+NET "op_seg[1]" IOSTANDARD = LVTTL;
+# ^ | 2
+NET "op_seg[2]" LOC = P132;
+NET "op_seg[2]" IOSTANDARD = LVTTL;
+# v | 6
+NET "op_seg[3]" LOC = P131;
+NET "op_seg[3]" IOSTANDARD = LVTTL;
+# < \ 3
+NET "op_seg[4]" LOC = P127;
+NET "op_seg[4]" IOSTANDARD = LVTTL;
+# < / 7
+NET "op_seg[5]" LOC = P126;
+NET "op_seg[5]" IOSTANDARD = LVTTL;
+# > \ 17
+NET "op_seg[6]" LOC = P124;
+NET "op_seg[6]" IOSTANDARD = LVTTL;
+# > / 14
+NET "op_seg[7]" LOC = P123;
+NET "op_seg[7]" IOSTANDARD = LVTTL;

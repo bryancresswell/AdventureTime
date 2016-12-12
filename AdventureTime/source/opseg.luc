@@ -6,8 +6,8 @@ module operatorseg (
   always {
     case (char) {
       0: segs = 8b00001111;
-      1: segs = 8b00000011;
-      2: segs = 8b11110000;
+      2: segs = 8b00000011; // x
+      1: segs = 8b11110000; // minus
       default: segs = 8b00000000;
     }
   }

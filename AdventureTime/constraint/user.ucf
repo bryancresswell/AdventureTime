@@ -55,8 +55,8 @@ NET "buttons2" LOC = P75 | IOSTANDARD = LVTTL | PULLUP;
 NET "buttons1" LOC = P78 | IOSTANDARD = LVTTL | PULLUP;
 NET "buttons0" LOC = P79 | IOSTANDARD = LVTTL | PULLUP;
 
-NET "enterbuttons" LOC = P50 | IOSTANDARD = LVTTL | PULLUP;
-NET "resetbuttons" LOC = P40 | IOSTANDARD = LVTTL | PULLUP;
+NET "enterbuttons" LOC = P51 | IOSTANDARD = LVTTL | PULLUP;
+NET "resetbuttons" LOC = P41 | IOSTANDARD = LVTTL | PULLUP;
 
 NET "op_seg<0>" LOC = P134 | IOSTANDARD = LVTTL; # < - 15
 NET "op_seg<1>" LOC = P133 | IOSTANDARD = LVTTL; # > - 5
