@@ -8,7 +8,7 @@
    Parameters:
      SIZE = 5
      DIV = 26
-     TOP = 15
+     TOP = 20
      UP = 1
 */
 module counter_22 (
@@ -19,13 +19,13 @@ module counter_22 (
   
   localparam SIZE = 3'h5;
   localparam DIV = 5'h1a;
-  localparam TOP = 4'hf;
+  localparam TOP = 5'h14;
   localparam UP = 1'h1;
   
   
   reg [30:0] M_ctr_d, M_ctr_q = 1'h0;
   
-  localparam MAX_VALUE = 30'h3fffffff;
+  localparam MAX_VALUE = 31'h53ffffff;
   
   always @* begin
     M_ctr_d = M_ctr_q;
@@ -33,13 +33,13 @@ module counter_22 (
     value = M_ctr_q[26+4-:5];
     if (1'h1) begin
       M_ctr_d = M_ctr_q + 1'h1;
-      if (1'h1 && M_ctr_q == 30'h3fffffff) begin
+      if (1'h1 && M_ctr_q == 31'h53ffffff) begin
         M_ctr_d = 1'h0;
       end
     end else begin
       M_ctr_d = M_ctr_q - 1'h1;
       if (1'h1 && M_ctr_q == 1'h0) begin
-        M_ctr_d = 30'h3fffffff;
+        M_ctr_d = 31'h53ffffff;
       end
     end
   end

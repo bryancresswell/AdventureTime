@@ -1,5 +1,5 @@
 //! **************************************************************************
-// Written by: Map P.20131013 on Mon Dec 12 19:57:34 2016
+// Written by: Map P.20131013 on Tue Dec 13 02:17:43 2016
 //! **************************************************************************
 
 SCHEMATIC START;
@@ -225,53 +225,57 @@ TIMEGRP clk = BEL "digitst/M_s_q_29" BEL "digitst/M_s_q_28" BEL
         "timingCounter4/M_ctr_q_27" BEL "timingCounter4/M_ctr_q_28" BEL
         "timingCounter4/M_ctr_q_29" BEL "M_states_q_FSM_FFd1" BEL
         "M_states_q_FSM_FFd2" BEL "M_states_q_FSM_FFd3" BEL
-        "M_states_q_FSM_FFd4" BEL "M_states_q_FSM_FFd5" BEL
-        "M_states_q_FSM_FFd6" BEL "M_hp_q_FSM_FFd1" BEL "M_hp_q_FSM_FFd2" BEL
-        "M_hp_q_FSM_FFd3" BEL "M_level_q_FSM_FFd1" BEL "M_level_q_FSM_FFd2"
-        BEL "M_level_q_FSM_FFd3" BEL "enterbutton/M_ctr_q_0" BEL
-        "enterbutton/edge_detector/M_last_q" BEL "msegb/ctr/M_ctr_q_0" BEL
-        "msegb/ctr/M_ctr_q_1" BEL "msegb/ctr/M_ctr_q_2" BEL
-        "msegb/ctr/M_ctr_q_3" BEL "msegb/ctr/M_ctr_q_4" BEL
-        "msegb/ctr/M_ctr_q_5" BEL "msegb/ctr/M_ctr_q_6" BEL
-        "msegb/ctr/M_ctr_q_7" BEL "msegb/ctr/M_ctr_q_8" BEL
-        "msegb/ctr/M_ctr_q_9" BEL "msegb/ctr/M_ctr_q_10" BEL
-        "msegb/ctr/M_ctr_q_11" BEL "msegb/ctr/M_ctr_q_12" BEL
-        "msegb/ctr/M_ctr_q_13" BEL "msegb/ctr/M_ctr_q_14" BEL
-        "msegb/ctr/M_ctr_q_15" BEL "msegb/ctr/M_ctr_q_16" BEL
-        "msegb/ctr/M_ctr_q_17" BEL "digitsa/M_c_q_3" BEL "digitsa/M_c_q_2" BEL
-        "digitsa/M_c_q_1" BEL "digitsa/M_c_q_0" BEL "digitsa/M_s_q_29" BEL
-        "digitsa/M_s_q_28" BEL "digitsa/M_s_q_27" BEL "digitsa/M_s_q_26" BEL
-        "digitsa/M_s_q_25" BEL "digitsa/M_s_q_24" BEL "digitsa/M_s_q_23" BEL
-        "digitsa/M_s_q_22" BEL "digitsa/M_s_q_21" BEL "digitsa/M_s_q_20" BEL
-        "digitsa/M_s_q_19" BEL "digitsa/M_s_q_18" BEL "digitsa/M_s_q_17" BEL
-        "digitsa/M_s_q_16" BEL "digitsa/M_s_q_15" BEL "digitsa/M_s_q_14" BEL
-        "digitsa/M_s_q_13" BEL "digitsa/M_s_q_12" BEL "digitsa/M_s_q_11" BEL
-        "digitsa/M_s_q_10" BEL "digitsa/M_s_q_9" BEL "digitsa/M_s_q_8" BEL
-        "digitsa/M_s_q_7" BEL "digitsa/M_s_q_6" BEL "digitsa/M_s_q_5" BEL
-        "digitsa/M_s_q_4" BEL "digitsa/M_s_q_3" BEL "digitsa/M_s_q_2" BEL
-        "digitsa/M_s_q_1" BEL "digitsa/M_s_q_0" BEL
-        "digitsa/n_gen_0[0].n/M_last_q" BEL "digitsa/n_gen_0[5].n/M_last_q"
-        BEL "digitsa/n_gen_0[2].n/M_last_q" BEL
-        "digitsa/n_gen_0[7].n/M_last_q" BEL "digitsa/n_gen_0[4].n/M_last_q"
-        BEL "digitsa/n_gen_0[1].n/M_last_q" BEL
-        "digitsa/n_gen_0[6].n/M_last_q" BEL "digitsa/n_gen_0[3].n/M_last_q"
-        BEL "digitsb/M_s_q_29" BEL "digitsb/M_s_q_28" BEL "digitsb/M_s_q_27"
-        BEL "digitsb/M_s_q_26" BEL "digitsb/M_s_q_25" BEL "digitsb/M_s_q_24"
-        BEL "digitsb/M_s_q_23" BEL "digitsb/M_s_q_22" BEL "digitsb/M_s_q_21"
-        BEL "digitsb/M_s_q_20" BEL "digitsb/M_s_q_19" BEL "digitsb/M_s_q_18"
-        BEL "digitsb/M_s_q_17" BEL "digitsb/M_s_q_16" BEL "digitsb/M_s_q_15"
-        BEL "digitsb/M_s_q_14" BEL "digitsb/M_s_q_13" BEL "digitsb/M_s_q_12"
-        BEL "digitsb/M_s_q_11" BEL "digitsb/M_s_q_10" BEL "digitsb/M_s_q_9"
-        BEL "digitsb/M_s_q_8" BEL "digitsb/M_s_q_7" BEL "digitsb/M_s_q_6" BEL
-        "digitsb/M_s_q_5" BEL "digitsb/M_s_q_4" BEL "digitsb/M_s_q_3" BEL
-        "digitsb/M_s_q_2" BEL "digitsb/M_s_q_1" BEL "digitsb/M_s_q_0" BEL
-        "digitsb/M_c_q_3" BEL "digitsb/M_c_q_2" BEL "digitsb/M_c_q_1" BEL
-        "digitsb/M_c_q_0" BEL "digitsb/n_gen_0[4].n/M_last_q" BEL
-        "digitsb/n_gen_0[1].n/M_last_q" BEL "digitsb/n_gen_0[6].n/M_last_q"
-        BEL "digitsb/n_gen_0[3].n/M_last_q" BEL
-        "digitsb/n_gen_0[0].n/M_last_q" BEL "digitsb/n_gen_0[5].n/M_last_q"
-        BEL "digitsb/n_gen_0[2].n/M_last_q" BEL
-        "digitsb/n_gen_0[7].n/M_last_q";
+        "flashMyLED/M_ctr_q_24" BEL "flashMyLED/M_ctr_q_23" BEL
+        "flashMyLED/M_ctr_q_22" BEL "flashMyLED/M_ctr_q_21" BEL
+        "flashMyLED/M_ctr_q_20" BEL "flashMyLED/M_ctr_q_19" BEL
+        "flashMyLED/M_ctr_q_18" BEL "M_hp_q_FSM_FFd1" BEL "M_hp_q_FSM_FFd2"
+        BEL "M_hp_q_FSM_FFd3" BEL "M_states_q_FSM_FFd1_1" BEL
+        "M_states_q_FSM_FFd3_1" BEL "resetbutton/M_ctr_q_0" BEL
+        "resetbutton/edge_detector/M_last_q" BEL "M_level_q_FSM_FFd1" BEL
+        "M_level_q_FSM_FFd2" BEL "M_level_q_FSM_FFd3" BEL
+        "enterbutton/M_ctr_q_0" BEL "enterbutton/edge_detector/M_last_q" BEL
+        "msegb/ctr/M_ctr_q_0" BEL "msegb/ctr/M_ctr_q_1" BEL
+        "msegb/ctr/M_ctr_q_2" BEL "msegb/ctr/M_ctr_q_3" BEL
+        "msegb/ctr/M_ctr_q_4" BEL "msegb/ctr/M_ctr_q_5" BEL
+        "msegb/ctr/M_ctr_q_6" BEL "msegb/ctr/M_ctr_q_7" BEL
+        "msegb/ctr/M_ctr_q_8" BEL "msegb/ctr/M_ctr_q_9" BEL
+        "msegb/ctr/M_ctr_q_10" BEL "msegb/ctr/M_ctr_q_11" BEL
+        "msegb/ctr/M_ctr_q_12" BEL "msegb/ctr/M_ctr_q_13" BEL
+        "msegb/ctr/M_ctr_q_14" BEL "msegb/ctr/M_ctr_q_15" BEL
+        "msegb/ctr/M_ctr_q_16" BEL "msegb/ctr/M_ctr_q_17" BEL
+        "digitsa/M_c_q_3" BEL "digitsa/M_c_q_2" BEL "digitsa/M_c_q_1" BEL
+        "digitsa/M_c_q_0" BEL "digitsa/M_s_q_29" BEL "digitsa/M_s_q_28" BEL
+        "digitsa/M_s_q_27" BEL "digitsa/M_s_q_26" BEL "digitsa/M_s_q_25" BEL
+        "digitsa/M_s_q_24" BEL "digitsa/M_s_q_23" BEL "digitsa/M_s_q_22" BEL
+        "digitsa/M_s_q_21" BEL "digitsa/M_s_q_20" BEL "digitsa/M_s_q_19" BEL
+        "digitsa/M_s_q_18" BEL "digitsa/M_s_q_17" BEL "digitsa/M_s_q_16" BEL
+        "digitsa/M_s_q_15" BEL "digitsa/M_s_q_14" BEL "digitsa/M_s_q_13" BEL
+        "digitsa/M_s_q_12" BEL "digitsa/M_s_q_11" BEL "digitsa/M_s_q_10" BEL
+        "digitsa/M_s_q_9" BEL "digitsa/M_s_q_8" BEL "digitsa/M_s_q_7" BEL
+        "digitsa/M_s_q_6" BEL "digitsa/M_s_q_5" BEL "digitsa/M_s_q_4" BEL
+        "digitsa/M_s_q_3" BEL "digitsa/M_s_q_2" BEL "digitsa/M_s_q_1" BEL
+        "digitsa/M_s_q_0" BEL "digitsa/n_gen_0[0].n/M_last_q" BEL
+        "digitsa/n_gen_0[5].n/M_last_q" BEL "digitsa/n_gen_0[2].n/M_last_q"
+        BEL "digitsa/n_gen_0[7].n/M_last_q" BEL
+        "digitsa/n_gen_0[4].n/M_last_q" BEL "digitsa/n_gen_0[1].n/M_last_q"
+        BEL "digitsa/n_gen_0[6].n/M_last_q" BEL
+        "digitsa/n_gen_0[3].n/M_last_q" BEL "digitsb/M_s_q_29" BEL
+        "digitsb/M_s_q_28" BEL "digitsb/M_s_q_27" BEL "digitsb/M_s_q_26" BEL
+        "digitsb/M_s_q_25" BEL "digitsb/M_s_q_24" BEL "digitsb/M_s_q_23" BEL
+        "digitsb/M_s_q_22" BEL "digitsb/M_s_q_21" BEL "digitsb/M_s_q_20" BEL
+        "digitsb/M_s_q_19" BEL "digitsb/M_s_q_18" BEL "digitsb/M_s_q_17" BEL
+        "digitsb/M_s_q_16" BEL "digitsb/M_s_q_15" BEL "digitsb/M_s_q_14" BEL
+        "digitsb/M_s_q_13" BEL "digitsb/M_s_q_12" BEL "digitsb/M_s_q_11" BEL
+        "digitsb/M_s_q_10" BEL "digitsb/M_s_q_9" BEL "digitsb/M_s_q_8" BEL
+        "digitsb/M_s_q_7" BEL "digitsb/M_s_q_6" BEL "digitsb/M_s_q_5" BEL
+        "digitsb/M_s_q_4" BEL "digitsb/M_s_q_3" BEL "digitsb/M_s_q_2" BEL
+        "digitsb/M_s_q_1" BEL "digitsb/M_s_q_0" BEL "digitsb/M_c_q_3" BEL
+        "digitsb/M_c_q_2" BEL "digitsb/M_c_q_1" BEL "digitsb/M_c_q_0" BEL
+        "digitsb/n_gen_0[4].n/M_last_q" BEL "digitsb/n_gen_0[1].n/M_last_q"
+        BEL "digitsb/n_gen_0[6].n/M_last_q" BEL
+        "digitsb/n_gen_0[3].n/M_last_q" BEL "digitsb/n_gen_0[0].n/M_last_q"
+        BEL "digitsb/n_gen_0[5].n/M_last_q" BEL
+        "digitsb/n_gen_0[2].n/M_last_q" BEL "digitsb/n_gen_0[7].n/M_last_q";
 TS_clk = PERIOD TIMEGRP "clk" 50 MHz HIGH 50%;
 SCHEMATIC END;
 

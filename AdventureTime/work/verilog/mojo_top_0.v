@@ -135,14 +135,6 @@ module mojo_top_0 (
     .seg(M_msegt_seg),
     .sel(M_msegt_sel)
   );
-  wire [1-1:0] M_resetbutton_count;
-  reg [1-1:0] M_resetbutton_button;
-  buttonCounter_9 resetbutton (
-    .clk(clk),
-    .rst(rst),
-    .button(M_resetbutton_button),
-    .count(M_resetbutton_count)
-  );
   wire [1-1:0] M_button0_count;
   reg [1-1:0] M_button0_button;
   buttonCounter_9 button0 (
@@ -207,6 +199,12 @@ module mojo_top_0 (
     .button(M_button7_button),
     .count(M_button7_count)
   );
+  wire [8-1:0] M_flashMyLED_out;
+  wave_17 flashMyLED (
+    .clk(clk),
+    .rst(rst),
+    .out(M_flashMyLED_out)
+  );
   wire [1-1:0] M_enterbutton_count;
   reg [1-1:0] M_enterbutton_rst;
   reg [1-1:0] M_enterbutton_button;
@@ -216,41 +214,42 @@ module mojo_top_0 (
     .button(M_enterbutton_button),
     .count(M_enterbutton_count)
   );
+  wire [1-1:0] M_resetbutton_count;
+  reg [1-1:0] M_resetbutton_rst;
+  reg [1-1:0] M_resetbutton_button;
+  buttonCounter_9 resetbutton (
+    .clk(clk),
+    .rst(M_resetbutton_rst),
+    .button(M_resetbutton_button),
+    .count(M_resetbutton_count)
+  );
   wire [6-1:0] M_timingCounter1_value;
   reg [1-1:0] M_timingCounter1_rst;
-  counter_19 timingCounter1 (
+  counter_20 timingCounter1 (
     .clk(clk),
     .rst(M_timingCounter1_rst),
     .value(M_timingCounter1_value)
   );
   wire [5-1:0] M_timingCounter2_value;
   reg [1-1:0] M_timingCounter2_rst;
-  counter_20 timingCounter2 (
+  counter_21 timingCounter2 (
     .clk(clk),
     .rst(M_timingCounter2_rst),
     .value(M_timingCounter2_value)
   );
   wire [5-1:0] M_timingCounter3_value;
   reg [1-1:0] M_timingCounter3_rst;
-  counter_21 timingCounter3 (
+  counter_22 timingCounter3 (
     .clk(clk),
     .rst(M_timingCounter3_rst),
     .value(M_timingCounter3_value)
   );
   wire [5-1:0] M_timingCounter4_value;
   reg [1-1:0] M_timingCounter4_rst;
-  counter_22 timingCounter4 (
+  counter_23 timingCounter4 (
     .clk(clk),
     .rst(M_timingCounter4_rst),
     .value(M_timingCounter4_value)
-  );
-  
-  wire [8-1:0] M_seg_segs;
-  reg [4-1:0] M_seg_char;
-  sevenseg_23 seg (
-    .dot(1'h0),
-    .char(M_seg_char),
-    .segs(M_seg_segs)
   );
   
   wire [8-1:0] M_opseg_segs;
@@ -308,7 +307,6 @@ module mojo_top_0 (
     M_timingCounter2_rst = 1'h1;
     M_timingCounter3_rst = 1'h1;
     M_timingCounter4_rst = 1'h1;
-    M_seg_char = 1'h0;
     M_alu1_a = 1'h0;
     M_alu1_b = 1'h0;
     alu = M_alu1_alu;
@@ -326,19 +324,18 @@ module mojo_top_0 (
     M_timingCounter2_rst = 1'h1;
     M_timingCounter3_rst = 1'h1;
     M_timingCounter4_rst = 1'h1;
-    M_seg_char = 1'h0;
     M_digitsa_value = 1'h0;
     M_msega_values = M_digitsa_digits;
-    a_seg = M_msega_seg;
-    a_sel = ~M_msega_sel;
+    a_seg = M_flashMyLED_out;
+    a_sel = 4'h0;
     M_digitsb_value = 1'h0;
     M_msegb_values = M_digitsb_digits;
-    b_seg = M_msegb_seg;
-    b_sel = ~M_msegb_sel;
+    b_seg = M_flashMyLED_out;
+    b_sel = 4'h0;
     M_digitst_value = 1'h0;
     M_msegt_values = M_digitst_digits;
-    timer_seg = M_msegt_seg;
-    timer_sel = ~M_msegt_sel;
+    timer_seg = M_flashMyLED_out;
+    timer_sel = 4'h0;
     M_opseg_char = 1'h0;
     op_seg = M_opseg_segs;
     M_button0_button = ~buttons0;
@@ -353,14 +350,13 @@ module mojo_top_0 (
     M_enterbutton_button = ~enterbuttons;
     M_enterbutton_rst = 1'h0;
     M_resetbutton_button = ~resetbuttons;
+    M_resetbutton_rst = 1'h0;
+    io_led[0+7-:8] = M_flashMyLED_out;
+    io_led[8+7-:8] = M_flashMyLED_out;
+    io_led[16+7-:8] = M_flashMyLED_out;
     
     case (M_states_q)
       BEGIN_states: begin
-        M_rngesus_seed = M_rngesus_num[0+31-:32];
-        M_rngesus_next = 1'h1;
-        io_led[0+7-:8] = M_rngesus_num[0+7-:8];
-        io_led[8+7-:8] = M_rngesus_num[8+7-:8];
-        io_led[16+7-:8] = M_rngesus_num[16+7-:8];
         if (M_enterbutton_count) begin
           M_states_d = START_states;
           M_rngesus_seed = M_rngesus_num[0+31-:32];
@@ -541,6 +537,10 @@ module mojo_top_0 (
             M_states_d = OVER_states;
           end
         endcase
+        if (M_resetbutton_count) begin
+          M_states_d = BEGIN_states;
+          M_resetbutton_rst = 1'h1;
+        end
       end
       IDLE_states: begin
         if (M_enterbutton_count) begin
@@ -548,6 +548,10 @@ module mojo_top_0 (
           M_states_d = START_states;
           M_rngesus_seed = M_rngesus_num[0+31-:32];
           M_rngesus_next = 1'h1;
+        end
+        if (M_resetbutton_count) begin
+          M_states_d = BEGIN_states;
+          M_resetbutton_rst = 1'h1;
         end
       end
       LEVEL_states: begin
@@ -623,11 +627,11 @@ module mojo_top_0 (
         io_led[0+7-:8] = 8'hff;
         io_led[8+7-:8] = 8'hff;
         io_led[16+7-:8] = 8'hff;
-        if (M_enterbutton_count) begin
-          M_enterbutton_rst = 1'h1;
+        if (M_resetbutton_count) begin
+          M_resetbutton_rst = 1'h1;
           M_level_d = ONE_level;
           M_hp_d = EIGHT_hp;
-          M_states_d = START_states;
+          M_states_d = BEGIN_states;
         end
       end
     endcase

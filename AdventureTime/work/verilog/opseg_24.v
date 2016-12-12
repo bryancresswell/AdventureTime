@@ -17,10 +17,10 @@ module operatorseg_24 (
       1'h0: begin
         segs = 8'h0f;
       end
-      1'h1: begin
+      2'h2: begin
         segs = 8'h03;
       end
-      2'h2: begin
+      1'h1: begin
         segs = 8'hf0;
       end
       default: begin
