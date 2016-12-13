@@ -5,7 +5,7 @@
 */
 
 module operatorseg_24 (
-    input [3:0] char,
+    input [1:0] char,
     output reg [7:0] segs
   );
   
@@ -24,7 +24,7 @@ module operatorseg_24 (
         segs = 8'hf0;
       end
       default: begin
-        segs = 8'h00;
+        segs = 8'h0f;
       end
     endcase
   end

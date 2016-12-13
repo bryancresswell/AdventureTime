@@ -253,7 +253,7 @@ module mojo_top_0 (
   );
   
   wire [8-1:0] M_opseg_segs;
-  reg [4-1:0] M_opseg_char;
+  reg [2-1:0] M_opseg_char;
   operatorseg_24 opseg (
     .char(M_opseg_char),
     .segs(M_opseg_segs)
@@ -326,18 +326,18 @@ module mojo_top_0 (
     M_timingCounter4_rst = 1'h1;
     M_digitsa_value = 1'h0;
     M_msega_values = M_digitsa_digits;
-    a_seg = M_flashMyLED_out;
-    a_sel = 4'h0;
+    a_seg = M_msega_seg;
+    a_sel = ~M_msega_sel;
     M_digitsb_value = 1'h0;
     M_msegb_values = M_digitsb_digits;
-    b_seg = M_flashMyLED_out;
-    b_sel = 4'h0;
+    b_seg = M_msegb_seg;
+    b_sel = ~M_msegb_sel;
     M_digitst_value = 1'h0;
     M_msegt_values = M_digitst_digits;
-    timer_seg = M_flashMyLED_out;
-    timer_sel = 4'h0;
+    timer_seg = M_msegt_seg;
+    timer_sel = ~M_msegt_sel;
     M_opseg_char = 1'h0;
-    op_seg = M_opseg_segs;
+    op_seg = M_msegt_seg;
     M_button0_button = ~buttons0;
     M_button1_button = ~buttons1;
     M_button2_button = ~buttons2;
@@ -351,17 +351,19 @@ module mojo_top_0 (
     M_enterbutton_rst = 1'h0;
     M_resetbutton_button = ~resetbuttons;
     M_resetbutton_rst = 1'h0;
-    io_led[0+7-:8] = M_flashMyLED_out;
-    io_led[8+7-:8] = M_flashMyLED_out;
-    io_led[16+7-:8] = M_flashMyLED_out;
     
     case (M_states_q)
       BEGIN_states: begin
+        M_level_d = ONE_level;
+        M_hp_d = EIGHT_hp;
+        io_led[0+7-:8] = M_flashMyLED_out;
+        io_led[8+7-:8] = M_flashMyLED_out;
+        io_led[16+7-:8] = M_flashMyLED_out;
         if (M_enterbutton_count) begin
+          M_enterbutton_rst = 1'h1;
           M_states_d = START_states;
           M_rngesus_seed = M_rngesus_num[0+31-:32];
           M_rngesus_next = 1'h1;
-          M_enterbutton_rst = 1'h1;
         end
       end
       START_states: begin
@@ -543,6 +545,9 @@ module mojo_top_0 (
         end
       end
       IDLE_states: begin
+        a_seg = M_flashMyLED_out;
+        b_seg = M_flashMyLED_out;
+        timer_seg = M_flashMyLED_out;
         if (M_enterbutton_count) begin
           M_enterbutton_rst = 1'h1;
           M_states_d = START_states;
@@ -629,8 +634,6 @@ module mojo_top_0 (
         io_led[16+7-:8] = 8'hff;
         if (M_resetbutton_count) begin
           M_resetbutton_rst = 1'h1;
-          M_level_d = ONE_level;
-          M_hp_d = EIGHT_hp;
           M_states_d = BEGIN_states;
         end
       end

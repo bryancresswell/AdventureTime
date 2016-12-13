@@ -4,27 +4,27 @@
    This is a temporary file and any changes made to it will be destroyed.
 */
 
-module compare_49 (
+module shifter_61 (
     input [5:0] alufn,
-    input z,
-    output reg [7:0] cmpFinal
+    input [7:0] a,
+    input [7:0] b,
+    output reg [7:0] shifterResult
   );
   
   
   
-  reg cmpVal;
-  
   always @* begin
     
-    case (alufn[1+1-:2])
-      2'h1: begin
-        cmpVal = z;
+    case (alufn[0+2-:3])
+      3'h0: begin
+        shifterResult = a << b;
+      end
+      3'h1: begin
+        shifterResult = a >> b;
       end
       default: begin
-        cmpVal = 1'h0;
+        shifterResult[0+7-:8] = a << b;
       end
     endcase
-    cmpFinal[0+0-:1] = cmpVal;
-    cmpFinal[1+6-:7] = 7'h00;
   end
 endmodule

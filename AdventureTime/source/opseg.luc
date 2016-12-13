@@ -1,5 +1,5 @@
 module operatorseg (
-    input char[4],
+    input char[2],
     output segs[8]
   ) {
 
@@ -8,7 +8,7 @@ module operatorseg (
       0: segs = 8b00001111;
       2: segs = 8b00000011; // x
       1: segs = 8b11110000; // minus
-      default: segs = 8b00000000;
+      default: segs = 8b00001111;
     }
   }
 }

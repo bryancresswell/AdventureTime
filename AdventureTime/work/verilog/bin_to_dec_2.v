@@ -73,13 +73,13 @@ module bin_to_dec_2 (
   end
   
   always @(posedge clk) begin
-    M_s_q <= M_s_d;
-    
     if ((|M_n_out) == 1'b1) begin
       M_c_q <= 1'h0;
     end else begin
       M_c_q <= M_c_d;
     end
+    
+    M_s_q <= M_s_d;
   end
   
 endmodule

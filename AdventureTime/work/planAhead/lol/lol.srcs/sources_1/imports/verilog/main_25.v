@@ -25,7 +25,7 @@ module main_25 (
   reg [6-1:0] M_add_alufn;
   reg [8-1:0] M_add_a;
   reg [8-1:0] M_add_b;
-  adder_48 add (
+  adder_58 add (
     .alufn(M_add_alufn),
     .a(M_add_a),
     .b(M_add_b),
@@ -39,7 +39,7 @@ module main_25 (
   wire [8-1:0] M_com_cmpFinal;
   reg [6-1:0] M_com_alufn;
   reg [1-1:0] M_com_z;
-  compare_49 com (
+  compare_59 com (
     .alufn(M_com_alufn),
     .z(M_com_z),
     .cmpFinal(M_com_cmpFinal)
@@ -49,7 +49,7 @@ module main_25 (
   reg [8-1:0] M_multi_a;
   reg [8-1:0] M_multi_b;
   reg [6-1:0] M_multi_alufn;
-  multiply_50 multi (
+  multiply_60 multi (
     .a(M_multi_a),
     .b(M_multi_b),
     .alufn(M_multi_alufn),
@@ -60,7 +60,7 @@ module main_25 (
   reg [6-1:0] M_shift_alufn;
   reg [8-1:0] M_shift_a;
   reg [8-1:0] M_shift_b;
-  shifter_51 shift (
+  shifter_61 shift (
     .alufn(M_shift_alufn),
     .a(M_shift_a),
     .b(M_shift_b),
@@ -71,7 +71,7 @@ module main_25 (
   reg [6-1:0] M_boo_alufn;
   reg [8-1:0] M_boo_a;
   reg [8-1:0] M_boo_b;
-  boolean_52 boo (
+  boolean_62 boo (
     .alufn(M_boo_alufn),
     .a(M_boo_a),
     .b(M_boo_b),

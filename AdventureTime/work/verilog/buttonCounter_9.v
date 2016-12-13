@@ -20,12 +20,20 @@ module buttonCounter_9 (
     .in(M_edge_detector_in),
     .out(M_edge_detector_out)
   );
+  wire [1-1:0] M_butt_out;
+  reg [1-1:0] M_butt_in;
+  button_conditioner_39 butt (
+    .clk(clk),
+    .in(M_butt_in),
+    .out(M_butt_out)
+  );
   reg [0:0] M_ctr_d, M_ctr_q = 1'h0;
   
   always @* begin
     M_ctr_d = M_ctr_q;
     
-    M_edge_detector_in = button;
+    M_butt_in = button;
+    M_edge_detector_in = M_butt_out;
     count = M_ctr_q;
     if (M_edge_detector_out) begin
       M_ctr_d = M_ctr_q + 1'h1;

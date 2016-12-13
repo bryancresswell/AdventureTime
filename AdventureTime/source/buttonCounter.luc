@@ -7,14 +7,15 @@ module buttonCounter (
    
   .clk(clk) {
     edge_detector edge_detector(#RISE(1), #FALL(0)); // detect rising edges
-     
+    button_conditioner butt;
     .rst(rst) {
        dff ctr[1]; // our lovely counter
     }
   }
  
   always {
-    edge_detector.in = button; // input to the edge_detector
+    butt.in = button;
+    edge_detector.in = butt.out; // input to the edge_detector
     count = ctr.q;             // output the counter
      
     if (edge_detector.out)     // if edge detected

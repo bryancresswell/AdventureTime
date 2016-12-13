@@ -4,24 +4,27 @@
    This is a temporary file and any changes made to it will be destroyed.
 */
 
-module boolean_52 (
+module compare_59 (
     input [5:0] alufn,
-    input [7:0] a,
-    input [7:0] b,
-    output reg [7:0] booleanFinal
+    input z,
+    output reg [7:0] cmpFinal
   );
   
   
   
+  reg cmpVal;
+  
   always @* begin
     
-    case (alufn[0+3-:4])
-      4'he: begin
-        booleanFinal = a | b;
+    case (alufn[1+1-:2])
+      2'h1: begin
+        cmpVal = z;
       end
       default: begin
-        booleanFinal = a & b;
+        cmpVal = 1'h0;
       end
     endcase
+    cmpFinal[0+0-:1] = cmpVal;
+    cmpFinal[1+6-:7] = 7'h00;
   end
 endmodule

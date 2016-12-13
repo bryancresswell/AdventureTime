@@ -101,13 +101,16 @@
 <msg type="warning" file="Xst" num="647" delta="new" >Input &lt;<arg fmt="%s" index="1">alufn&lt;5:4&gt;</arg>&gt; is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
 </msg>
 
-<msg type="info" file="Xst" num="3231" delta="new" >The small RAM &lt;<arg fmt="%s" index="1">Mram_M_rngesus_num[17]_GND_1_o_wide_mux_26_OUT</arg>&gt; will be implemented on LUTs in order to maximize performance and save block RAM resources. If you want to force its implementation on block, use option/constraint ram_style.
+<msg type="info" file="Xst" num="3231" delta="new" >The small RAM &lt;<arg fmt="%s" index="1">Mram_M_rngesus_num[17]_GND_1_o_wide_mux_23_OUT</arg>&gt; will be implemented on LUTs in order to maximize performance and save block RAM resources. If you want to force its implementation on block, use option/constraint ram_style.
+</msg>
+
+<msg type="info" file="Xst" num="3218" delta="new" >HDL ADVISOR - The RAM &lt;<arg fmt="%s" index="1">Mram_segs</arg>&gt; will be implemented on LUTs either because you have described an asynchronous read or because of currently unsupported block RAM features. If you have described an asynchronous read, making it synchronous would allow you to take advantage of available block RAM resources, for optimized device usage and improved timings. Please refer to your documentation for coding guidelines.
 </msg>
 
 <msg type="info" file="Xst" num="3218" delta="new" >HDL ADVISOR - The RAM &lt;<arg fmt="%s" index="1">Mram_sg</arg>&gt; will be implemented on LUTs either because you have described an asynchronous read or because of currently unsupported block RAM features. If you have described an asynchronous read, making it synchronous would allow you to take advantage of available block RAM resources, for optimized device usage and improved timings. Please refer to your documentation for coding guidelines.
 </msg>
 
-<msg type="warning" file="Xst" num="2973" delta="new" >All outputs of instance &lt;<arg fmt="%s" index="1">alu1/boo</arg>&gt; of block &lt;<arg fmt="%s" index="2">boolean_52</arg>&gt; are unconnected in block &lt;<arg fmt="%s" index="3">mojo_top_0</arg>&gt;. Underlying logic will be removed.
+<msg type="warning" file="Xst" num="2973" delta="new" >All outputs of instance &lt;<arg fmt="%s" index="1">alu1/boo</arg>&gt; of block &lt;<arg fmt="%s" index="2">boolean_62</arg>&gt; are unconnected in block &lt;<arg fmt="%s" index="3">mojo_top_0</arg>&gt;. Underlying logic will be removed.
 </msg>
 
 <msg type="warning" file="Xst" num="1293" delta="new" >FF/Latch &lt;<arg fmt="%s" index="1">digitsb/n_gen_0[8].n/M_last_q</arg>&gt; has a constant value of <arg fmt="%d" index="2">0</arg> in block &lt;<arg fmt="%s" index="3">mojo_top_0</arg>&gt;. This FF/Latch will be trimmed during the optimization process.
@@ -152,58 +155,58 @@
 <msg type="warning" file="Xst" num="1896" delta="new" >Due to other FF/Latch trimming, FF/Latch &lt;<arg fmt="%s" index="1">digitst/n_gen_0[6].n/M_last_q</arg>&gt; has a constant value of <arg fmt="%d" index="2">0</arg> in block &lt;<arg fmt="%s" index="3">mojo_top_0</arg>&gt;. This FF/Latch will be trimmed during the optimization process.
 </msg>
 
-<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msegb/ctr/M_ctr_q_0</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msega/ctr/M_ctr_q_0&gt; &lt;msegt/ctr/M_ctr_q_0&gt; &lt;flashMyLED/M_ctr_q_0&gt; </arg>
+<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msega/ctr/M_ctr_q_10</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msegb/ctr/M_ctr_q_10&gt; &lt;msegt/ctr/M_ctr_q_10&gt; &lt;flashMyLED/M_ctr_q_10&gt; </arg>
 </msg>
 
-<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msegb/ctr/M_ctr_q_1</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msega/ctr/M_ctr_q_1&gt; &lt;msegt/ctr/M_ctr_q_1&gt; &lt;flashMyLED/M_ctr_q_1&gt; </arg>
+<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msega/ctr/M_ctr_q_11</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msegb/ctr/M_ctr_q_11&gt; &lt;msegt/ctr/M_ctr_q_11&gt; &lt;flashMyLED/M_ctr_q_11&gt; </arg>
 </msg>
 
-<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msegb/ctr/M_ctr_q_2</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msega/ctr/M_ctr_q_2&gt; &lt;msegt/ctr/M_ctr_q_2&gt; &lt;flashMyLED/M_ctr_q_2&gt; </arg>
+<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msega/ctr/M_ctr_q_12</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msegb/ctr/M_ctr_q_12&gt; &lt;msegt/ctr/M_ctr_q_12&gt; &lt;flashMyLED/M_ctr_q_12&gt; </arg>
 </msg>
 
-<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msegb/ctr/M_ctr_q_3</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msega/ctr/M_ctr_q_3&gt; &lt;msegt/ctr/M_ctr_q_3&gt; &lt;flashMyLED/M_ctr_q_3&gt; </arg>
+<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msega/ctr/M_ctr_q_13</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msegb/ctr/M_ctr_q_13&gt; &lt;msegt/ctr/M_ctr_q_13&gt; &lt;flashMyLED/M_ctr_q_13&gt; </arg>
 </msg>
 
-<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msegb/ctr/M_ctr_q_4</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msega/ctr/M_ctr_q_4&gt; &lt;msegt/ctr/M_ctr_q_4&gt; &lt;flashMyLED/M_ctr_q_4&gt; </arg>
+<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msega/ctr/M_ctr_q_14</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msegb/ctr/M_ctr_q_14&gt; &lt;msegt/ctr/M_ctr_q_14&gt; &lt;flashMyLED/M_ctr_q_14&gt; </arg>
 </msg>
 
-<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msegb/ctr/M_ctr_q_5</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msega/ctr/M_ctr_q_5&gt; &lt;msegt/ctr/M_ctr_q_5&gt; &lt;flashMyLED/M_ctr_q_5&gt; </arg>
+<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msega/ctr/M_ctr_q_15</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msegb/ctr/M_ctr_q_15&gt; &lt;msegt/ctr/M_ctr_q_15&gt; &lt;flashMyLED/M_ctr_q_15&gt; </arg>
 </msg>
 
-<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msegb/ctr/M_ctr_q_6</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msega/ctr/M_ctr_q_6&gt; &lt;msegt/ctr/M_ctr_q_6&gt; &lt;flashMyLED/M_ctr_q_6&gt; </arg>
+<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msega/ctr/M_ctr_q_16</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msegb/ctr/M_ctr_q_16&gt; &lt;msegt/ctr/M_ctr_q_16&gt; &lt;flashMyLED/M_ctr_q_16&gt; </arg>
 </msg>
 
-<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msegb/ctr/M_ctr_q_7</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msega/ctr/M_ctr_q_7&gt; &lt;msegt/ctr/M_ctr_q_7&gt; &lt;flashMyLED/M_ctr_q_7&gt; </arg>
+<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msega/ctr/M_ctr_q_17</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msegb/ctr/M_ctr_q_17&gt; &lt;msegt/ctr/M_ctr_q_17&gt; &lt;flashMyLED/M_ctr_q_17&gt; </arg>
 </msg>
 
-<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msegb/ctr/M_ctr_q_8</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msega/ctr/M_ctr_q_8&gt; &lt;msegt/ctr/M_ctr_q_8&gt; &lt;flashMyLED/M_ctr_q_8&gt; </arg>
+<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msega/ctr/M_ctr_q_0</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msegb/ctr/M_ctr_q_0&gt; &lt;msegt/ctr/M_ctr_q_0&gt; &lt;flashMyLED/M_ctr_q_0&gt; </arg>
 </msg>
 
-<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msegb/ctr/M_ctr_q_9</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msega/ctr/M_ctr_q_9&gt; &lt;msegt/ctr/M_ctr_q_9&gt; &lt;flashMyLED/M_ctr_q_9&gt; </arg>
+<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msega/ctr/M_ctr_q_1</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msegb/ctr/M_ctr_q_1&gt; &lt;msegt/ctr/M_ctr_q_1&gt; &lt;flashMyLED/M_ctr_q_1&gt; </arg>
 </msg>
 
-<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msegb/ctr/M_ctr_q_10</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msega/ctr/M_ctr_q_10&gt; &lt;msegt/ctr/M_ctr_q_10&gt; &lt;flashMyLED/M_ctr_q_10&gt; </arg>
+<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msega/ctr/M_ctr_q_2</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msegb/ctr/M_ctr_q_2&gt; &lt;msegt/ctr/M_ctr_q_2&gt; &lt;flashMyLED/M_ctr_q_2&gt; </arg>
 </msg>
 
-<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msegb/ctr/M_ctr_q_11</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msega/ctr/M_ctr_q_11&gt; &lt;msegt/ctr/M_ctr_q_11&gt; &lt;flashMyLED/M_ctr_q_11&gt; </arg>
+<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msega/ctr/M_ctr_q_3</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msegb/ctr/M_ctr_q_3&gt; &lt;msegt/ctr/M_ctr_q_3&gt; &lt;flashMyLED/M_ctr_q_3&gt; </arg>
 </msg>
 
-<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msegb/ctr/M_ctr_q_12</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msega/ctr/M_ctr_q_12&gt; &lt;msegt/ctr/M_ctr_q_12&gt; &lt;flashMyLED/M_ctr_q_12&gt; </arg>
+<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msega/ctr/M_ctr_q_4</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msegb/ctr/M_ctr_q_4&gt; &lt;msegt/ctr/M_ctr_q_4&gt; &lt;flashMyLED/M_ctr_q_4&gt; </arg>
 </msg>
 
-<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msegb/ctr/M_ctr_q_13</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msega/ctr/M_ctr_q_13&gt; &lt;msegt/ctr/M_ctr_q_13&gt; &lt;flashMyLED/M_ctr_q_13&gt; </arg>
+<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msega/ctr/M_ctr_q_5</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msegb/ctr/M_ctr_q_5&gt; &lt;msegt/ctr/M_ctr_q_5&gt; &lt;flashMyLED/M_ctr_q_5&gt; </arg>
 </msg>
 
-<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msegb/ctr/M_ctr_q_14</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msega/ctr/M_ctr_q_14&gt; &lt;msegt/ctr/M_ctr_q_14&gt; &lt;flashMyLED/M_ctr_q_14&gt; </arg>
+<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msega/ctr/M_ctr_q_6</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msegb/ctr/M_ctr_q_6&gt; &lt;msegt/ctr/M_ctr_q_6&gt; &lt;flashMyLED/M_ctr_q_6&gt; </arg>
 </msg>
 
-<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msegb/ctr/M_ctr_q_15</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msega/ctr/M_ctr_q_15&gt; &lt;msegt/ctr/M_ctr_q_15&gt; &lt;flashMyLED/M_ctr_q_15&gt; </arg>
+<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msega/ctr/M_ctr_q_7</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msegb/ctr/M_ctr_q_7&gt; &lt;msegt/ctr/M_ctr_q_7&gt; &lt;flashMyLED/M_ctr_q_7&gt; </arg>
 </msg>
 
-<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msegb/ctr/M_ctr_q_16</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msega/ctr/M_ctr_q_16&gt; &lt;msegt/ctr/M_ctr_q_16&gt; &lt;flashMyLED/M_ctr_q_16&gt; </arg>
+<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msega/ctr/M_ctr_q_8</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msegb/ctr/M_ctr_q_8&gt; &lt;msegt/ctr/M_ctr_q_8&gt; &lt;flashMyLED/M_ctr_q_8&gt; </arg>
 </msg>
 
-<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msegb/ctr/M_ctr_q_17</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msega/ctr/M_ctr_q_17&gt; &lt;msegt/ctr/M_ctr_q_17&gt; &lt;flashMyLED/M_ctr_q_17&gt; </arg>
+<msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">msega/ctr/M_ctr_q_9</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">3 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;msegb/ctr/M_ctr_q_9&gt; &lt;msegt/ctr/M_ctr_q_9&gt; &lt;flashMyLED/M_ctr_q_9&gt; </arg>
 </msg>
 
 <msg type="info" file="Xst" num="2261" delta="new" >The FF/Latch &lt;<arg fmt="%s" index="1">digitst/n_gen_0[7].n/M_last_q</arg>&gt; in Unit &lt;<arg fmt="%s" index="2">mojo_top_0</arg>&gt; is equivalent to the following <arg fmt="%s" index="3">6 FFs/Latches</arg>, which will be removed : <arg fmt="%s" index="4">&lt;digitst/n_gen_0[8].n/M_last_q&gt; &lt;digitst/n_gen_0[9].n/M_last_q&gt; &lt;digitst/n_gen_0[10].n/M_last_q&gt; &lt;digitst/n_gen_0[11].n/M_last_q&gt; &lt;digitst/n_gen_0[12].n/M_last_q&gt; &lt;digitst/n_gen_0[13].n/M_last_q&gt; </arg>

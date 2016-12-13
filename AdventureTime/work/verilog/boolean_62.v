@@ -4,26 +4,23 @@
    This is a temporary file and any changes made to it will be destroyed.
 */
 
-module shifter_51 (
+module boolean_62 (
     input [5:0] alufn,
     input [7:0] a,
     input [7:0] b,
-    output reg [7:0] shifterResult
+    output reg [7:0] booleanFinal
   );
   
   
   
   always @* begin
     
-    case (alufn[0+2-:3])
-      3'h0: begin
-        shifterResult = a << b;
-      end
-      3'h1: begin
-        shifterResult = a >> b;
+    case (alufn[0+3-:4])
+      4'he: begin
+        booleanFinal = a | b;
       end
       default: begin
-        shifterResult[0+7-:8] = a << b;
+        booleanFinal = a & b;
       end
     endcase
   end
